@@ -4,7 +4,7 @@ Python version Python 3.13.5.
 Python libraries used:
 dask             2025.5.1
 
-Dask is used to load pandas dataframes in chunks to unsure the computer does not run out of memory since all files are loaded at once and exported as the programs runs.
+Dask is used to load pandas dataframes in chunks to ensure the computer does not run out of memory since all files are loaded at once and exported as the programs runs.
 
 Follow instructions on dask website.
 https://docs.dask.org/en/stable/install.html#:~:text=Dask%20modules%20like%20dask.,pandas%2C%20or%20Tornado%2C%20respectively.
