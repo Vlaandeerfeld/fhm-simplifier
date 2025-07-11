@@ -1,22 +1,23 @@
-# FHM11-CSV_Simplifier
+fhm-simplifier v0.1.0
 
-Python version Python 3.13.5.
+A python package using the dask package to load, sanitize and output Franchise Hockey Manager CSV exports. Can output resulting files to .csv or .parquet. Files are meant to be used for further data analysis.
+
+The program is strict with the CSVs so probably will not work with previous years or possibly even previous updates of the same game if they added or removed columns. Until it reaches full release.
+
+Python version Python >= 3.13.5.
 Python libraries used:
-dask             2025.5.1
+dask >= 2025.5.1
+pandas >= 2.3.1
+numpy >= 2.3.1
+pyarrow >= 20.0.0
 
 Dask is used to load pandas dataframes in chunks to ensure the computer does not run out of memory since all files are loaded at once and exported as the programs runs.
 
 Follow instructions on dask website.
-https://docs.dask.org/en/stable/install.html#:~:text=Dask%20modules%20like%20dask.,pandas%2C%20or%20Tornado%2C%20respectively.
+https://docs.dask.org/en/stable/install.html
 
 Installed through pip using:
-python -m pip install "dask[complete]"
-
-dask requires at least Numpy and pandas
-
-A python program using the dask library to load, sanitize and output Franchise Hockey Manager 11 CSV exports. Can output resulting files to .csv or .parquet. Files are meant to be used for further data analysis.
-
-The program is strict with the CSVs so probably will not work with previous years or possibly even previous updates of the same game if they added or removed columns.
+python -m pip install "dask[dataframe]"
 
 Some issues with the games CSV files are:
 1. team_lines.csv has 4 extra null values at the end of each row. Column labels are also not correct. For example after column 'PK3on5 L2 LD' is another 'PK3on5 L2 LD' label when the second one is supposed to be for the RD. That is why every CSV imported has column labels applied instead of using existing ones.
