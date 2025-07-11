@@ -176,7 +176,7 @@ def simplifyFiles(files, season, teams, leagues):
 	dfPlayerGoalieRS = dfPlayerGoalieRS[dfPlayerGoalieRS['TeamId'].isin(teams)]
 	dfPlayerGoalieRS = dfPlayerGoalieRS.assign(Season=season)
 	dfPlayerGoalieRS['SV_Per'] = dfPlayerGoalieRS['SV_Per'].replace('.00nan', '0')
-	dfPlayerGoalieRS = dfPlayerGoalieRS.astype({'PlayerId': 'Int32', 'TeamId': 'Int32', 'Season': 'string', 'GP': 'Int32', 'TOI': 'Int32', 'TOI': 'Int32', 'Wins': 'Int32', 'Losses': 'Int32', 'OT': 'Int32', 'SA': 'Int32', 'Saves': 'Int32', 'GA': 'Int32', 'GAA': 'Float32', 'Shutouts': 'Int32', 'SV_Per': 'Float32', 'GR': 'Int32'})
+	dfPlayerGoalieRS = dfPlayerGoalieRS.astype({'PlayerId': 'Int32', 'TeamId': 'Int32', 'Season': 'string', 'GP': 'Int32', 'TOI': 'Int32', 'Wins': 'Int32', 'Losses': 'Int32', 'OT': 'Int32', 'SA': 'Int32', 'Saves': 'Int32', 'GA': 'Int32', 'GAA': 'Float32', 'Shutouts': 'Int32', 'SV_Per': 'Float32', 'GR': 'Int32'})
 	dfPlayerGoalieRS = dfPlayerGoalieRS[['PlayerId', 'TeamId', 'Season', 'GP', 'G_Start', 'TOI', 'Wins', 'Losses', 'OT', 'SA', 'Saves', 'GA', 'GAA', 'Shutouts', 'SV_Per', 'GR']]
 	dfPlayerGoalieRS.to_parquet(outfilepath + 'goalie_stats_rs.parquet', name_function=lambda x: f'{seasonvalue}_goalie_stats_rs{x}.parquet', write_index=False)
 
