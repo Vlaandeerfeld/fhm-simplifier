@@ -1,3 +1,20 @@
+fhm-simplifier v0.2.0
+
+Not compatible with earlier version exports.
+
+Removed hard-coded csv simplify functions and moved to separate config.json.
+Version: FHM11-v11.4.52 template file added.
+
+Changed Season column in team_lines.csv to Date column which takes last game played date from schedule to approximate date in season where lines were exported.
+
+Removed index_col=False on team_lines and staff_master import as it was not neccessary.
+
+Removed filled values for null and left as None.
+
+Changed Scholarship column values "-" to "No" in contract and contract_renewed.
+
+Removed underscore in column names and changed to PascalCase naming convention because I hate finding the shift key.
+
 fhm-simplifier v0.1.0
 
 A python package using the dask package to load, sanitize and output Franchise Hockey Manager CSV exports. Can output resulting files to .csv or .parquet. Files are meant to be used for further data analysis.
@@ -21,7 +38,7 @@ python -m pip install "dask[dataframe]"
 
 Some issues with the games CSV files are:
 1. team_lines.csv has 4 extra null values at the end of each row. Column labels are also not correct. For example after column 'PK3on5 L2 LD' is another 'PK3on5 L2 LD' label when the second one is supposed to be for the RD. That is why every CSV imported has column labels applied instead of using existing ones.
-2. staff_ratings.csv has a ';' at the end of the first line indicating a column break but not a line break. index_col=False added and there is an extra column Between 'Trainer_Skill' and 'Evaluate_Abilities'. Added column named 'Blank' and then omitted it from following use_cols=[] statement. In addition there are ~700 repeat rows of 'StaffIds' added to end of file. Used first occurance of 'StaffId' as they seemed to be the correct ones.
+2. staff_ratings.csv has a ';' at the end of the first line indicating a column break but not a line break. (Removed in v0.2.0: index_col=False added). There is an extra column Between 'Trainer_Skill' and 'Evaluate_Abilities'. Added column named 'Blank' and then omitted it from following use_cols=[] statement. In addition there are ~700 repeat rows of 'StaffIds' added to end of file. Used first occurance of 'StaffId' as they seemed to be the correct ones.
 3. staff_master.csv also has ~700 repeat rows of 'StaffIds' added to end of file. Also used first occurance.
 4. goalie stats related CSVs are imported like all other CSVs as strings because 'SV_Per' for a goalie without a shot are stored as '00nan'. When trying to convert into Int32 causes error. 'Save_Per' with '00nan' converted to '0' first.
 5. player_ratings.csv has a few values that are I suspect not used anymore that still get values. Ordered columns by how they show up on players and goalies and moved unused to end of row.
@@ -35,7 +52,7 @@ General improvements are:
 6. Changed order of columns for either better grouping of relative stats or to be consistent with in-game displayed stats.
 7. player_ratings.csv ratings only related to goalies had 'Goalie_' added as a prefix e.g 'Mental Toughness' to 'Goalie_Mental_Toughness'.
 8. Consolidation of CSV files to add more context to each output file. 29 files imported. 22 files exported. There are 41 files exported from the games, but files related to career or retired stats were ignored (12 files).
-9. Added 'Season' column to almost every exported file. Exceptions were files with GameIds (5 files: skater_stats_game, goalie_stats_game, games_penalties, games_result, games_scores).
+9. Added 'Season' column to almost every exported file. (team_lines season column changed to Date in v0.2.0). Exceptions were files with GameIds (5 files: skater_stats_game, goalie_stats_game, games_penalties, games_result, games_scores).
 10. Removed 'FranchiseId' column as was not sure its used anymore.
 11. Ability to specify which leagues are included in data. e.g settings leagues to '0' will only leave NHL stats.
 
@@ -50,16 +67,17 @@ Default leagues (9) are:
 8. '12' or 'WHL'
 9. '13' or 'QMJHL'
 
-Leagues can be added to line 82:
+Leagues can be added to line 61:
 leagues = ['0', '1', '2', '3', '4', '10', '11', '12', '13']
 
 Filepath to game CSV can be modified on line 37:
 filepath = '/path/to/fhm11/saved_games/savegame.lg/import_export/csv/'
 
-Output folder can be modified on line 95:
+Output folder can be modified on line 73:
 outfilepath = 'simplifiedCSV/'
 
-Default export file type is parquet can be modified by changing df.to_parquet({fileName}, name_function='', write_index=False) to to_csv({fileName}, index=False) on lines:
+(Changed in v0.2.0 default is now both csv and parquet file export). Default export file type is parquet can be modified by changing df.to_parquet({fileName}, name_function='', write_index=False) to to_csv({fileName}, index=False) on lines:
+(Changed to line 203 for csv and 204 for parquet in v0.2.0)
 1. 117        
 2. 136       
 3. 147
@@ -97,7 +115,7 @@ e.g Mitch Marner in game value showing Ability: 4.5 and Potential: 4.5. Exported
 
 <img width="1887" height="949" alt="players2-Mitch_Marner" src="https://github.com/user-attachments/assets/3f384218-8c66-42f3-91c4-38f0110d5364" />
 
-team_stats_playoffs.csv has no attendance information in relevant columns.
+team_stats_playoffs.csv is a duplicate of team_stats.csv
 
 Simplified files still rely on exported game information being accurate.
 
@@ -120,14 +138,14 @@ The program does export 22 files, see attached photo for equivalent in-game info
 <img width="1867" height="286" alt="skater_stats_rs-Mikael_Backlund" src="https://github.com/user-attachments/assets/9410d9ab-4daa-49a9-aa7c-b19315ac7829" /><br>
 9. skater_stats_po - cleans up player_skater_stats_po.csv<br>
 <img width="1868" height="286" alt="skater_stats_po-Mikael_Backlund" src="https://github.com/user-attachments/assets/087d0535-2f34-49ea-9d0f-41eeb1535773" /><br>
-10. skater_stats_po - cleans up player_skater_stats_ps.csv<br>
+10. skater_stats_ps - cleans up player_skater_stats_ps.csv<br>
 11. goalie_stats_game - consolidates boxscore_goalie_summary.csv and schedules.csv<br>
 <img width="1861" height="263" alt="goalie_stats_game-Dustin_Wolf" src="https://github.com/user-attachments/assets/e460a012-c75e-4660-89c1-e726541aa13c" /><br>
 12. goalie_stats_rs - cleans up player_goalie_stats_rs.csv<br>
 <img width="1864" height="283" alt="goalie_stats_rs-Dustin_Wolf" src="https://github.com/user-attachments/assets/59369c51-4f5e-42ae-ac32-78a1d67ab3eb" /><br>
 13. goalie_stats_po - cleans up player_goalie_stats_po.csv<br>
 <img width="1867" height="284" alt="goalie_stats_po-Dustin_Wolf" src="https://github.com/user-attachments/assets/683e7430-3c3a-420b-8698-2cfacbd514f8" /><br>
-14. goalie_stats_ps - cleans up player_goalie_stats_po.csv<br>
+14. goalie_stats_ps - cleans up player_goalie_stats_ps.csv<br>
 15. draft - consolidates draft_info.csv and draft_index.csv<br>
 <img width="1862" height="177" alt="draft-Mitch_Marner" src="https://github.com/user-attachments/assets/fa6ba898-fafa-49b9-b832-b70c742d99c6" /><br>
 16. staff - consolidates staff_master.csv and staff_ratings.csv<br>
