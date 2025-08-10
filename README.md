@@ -1,3 +1,19 @@
+fhm-simplifier v0.2.1
+
+Not compatible with earlier version exports.
+
+Some tweaks and changes to column names and data structure to keep consistent with expected output.
+
+Removed team_playoff_stats because it was a duplicate of team_stats and offered no playoff stats.
+
+Example_SQL-Structure.md update to provide more realistic structure with better data types.
+
+If exporting to SQL database through anything but python you may encounter struggle with using None null python type and fitting in SQL null expected. Columns without values have None type used by python. 
+
+temp tables are used to export into then add to main table because of primary keys.
+
+Draft data is checked to remove dates before 1700 and after 3000. There were 3 instances of dates outside this range in the data. Also duplicates were found and checked for.
+
 fhm-simplifier v0.2.0
 
 Not compatible with earlier version exports.

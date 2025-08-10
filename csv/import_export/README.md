@@ -1,1 +1,1 @@
-This is the default for import files
+Default folder for exported csv files.

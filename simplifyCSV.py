@@ -8,7 +8,7 @@ import json
 from io import StringIO
 
 # Print iterations progress credit to Greenstick from https://stackoverflow.com/questions/3173320/text-progress-bar-in-terminal-with-block-characters because I could not figure it out.
-def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 22, fill = '█', printEnd = "\r\n"):
+def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 21, fill = '█', printEnd = "\r\n"):
 	"""
 	Call in a loop to create terminal progress bar
 	@params:
@@ -35,33 +35,31 @@ def importFiles():
  	#change filepath variable to filepath to save game import/export file
  	filepath = 'csv/import_export/'
 
- 	dfSchedules = dd.read_csv(filepath + 'schedules.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=['LeagueId', 'Date', 'HomeId', 'Score_Home', 'AwayId', 'Score_Away', 'Type', 'Played', 'OT', 'SO', 'GameId'], dtype='string')	
+ 	dfSchedules = dd.read_csv(filepath + 'schedules.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=['LeagueId', 'Dates', 'HomeId', 'Score_Home', 'AwayId', 'Score_Away', 'Types', 'Played', 'OT', 'SO', 'GameId'], dtype='string')	
  	dfTeamData = dd.read_csv(filepath + 'team_data.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=['TeamId', 'LeagueId', 'Team_Name', 'Team_Nickname', 'Team_Abbr', 'Parent_Team1', 'Parent_Team2', 'Parent_Team3', 'Parent_Team4', 'Parent_Team5', 'Parent_Team6', 'Parent_Team7', 'Parent_Team8', 'Primary_Colour', 'Secondary_Colour', 'Text_Colour', 'ConferenceId', 'DivisionId'], dtype='string')
  
  	return([dfTeamData, dfSchedules])
 
 def getLeagues(dfTeamData, dfSchedules):
 	#Get season start year and end year
-	seasonStart =  dfSchedules['Date'].head(n=1, compute=True)
+	seasonStart =  dfSchedules['Dates'].head(n=1, compute=True)
 	seasonStart = seasonStart.values[0][0:4]
-	seasonEnd = dfSchedules['Date'].tail(n=1, compute=True)
+	seasonEnd = dfSchedules['Dates'].tail(n=1, compute=True)
 	seasonEnd = seasonEnd.values[0][0:4]
 	season = seasonStart + '/' + seasonEnd
 
-	print('Season')
-	print(season)
-	#Using schedules.csv find last played game and store date to add to team lines to find approximate lines at date.
+	#Using schedules.csv find last played game and store Dates to add to team lines to find approximate lines at date.
 	dfSchedules = dfSchedules[dfSchedules['Played'].isin(['0'])].head(n=1, compute=True).reset_index()
 
 	#If all games played default to end of Season.
 	if dfSchedules.empty:
 		exportDate = '2025-06-30'
 	else:
-		exportDate = dfSchedules['Date'][0]
+		exportDate = dfSchedules['Dates'][0]
 
 
 	#Define leagues that will be included in output files. LeagueIds found in league_data.csv
-	leagues = ['0']
+	leagues = ['0', '1', '2', '3', '4', '10', '11', '12', '13', '14']
 
 	#Using leagues find TeamIds in those leagues.
 	teams = dfTeamData[['LeagueId', 'TeamId']].compute()
@@ -120,15 +118,14 @@ def simplifyFiles(season, teams, leagues, exportDate):
 					for asTypeComm in operation['commValue']:
 						dfData = dfData.astype({asTypeComm['colName']: asTypeComm['colValue']})
 				else:
-						dfData = dfData.astype(operation['commValue'][0]['colValue'])
+					dfData = dfData.astype(operation['commValue'][0]['colValue'])
+
 			#assign operation inserts new column. If Season assigns season value line 50, if Date assigns exportDate line 57.
 			elif operation['commandName'] == 'assign':
 				if operation['colName'] == 'Season':
 					dfData = dfData.assign(Season=season)
-				elif operation['colName'] == 'Date':
-					print('Date')
-					print(exportDate)
-					dfData = dfData.assign(Date=exportDate)
+				elif operation['colName'] == 'Dates':
+					dfData = dfData.assign(Dates=exportDate)
 			#like isin operation but opposite.
 			elif operation['commandName'] == 'isnotin':
 				for isnotinComm in operation['commValue']:
@@ -162,11 +159,18 @@ def simplifyFiles(season, teams, leagues, exportDate):
 						dfData = dfData.drop(columns = [dropColumn['colName']])
 			#dropduplicates operation removes duplicates from specified column.
 			elif operation['commandName'] == 'dropduplicates':
-				dfData = dfData.drop_duplicates(subset=[operation['colName']])
-			#draftyear operation is used to chanfe draftyear into season. e.g 2024 -> 2024/2025 to maintain uniformity with other dataframes.
+				if operation['colName'] == 'All':
+					dfData = dfData.drop_duplicates()
+				else:
+					dfData = dfData.drop_duplicates(subset=operation['colName'])
+			#draftyear operation is used to change draftyear into season. e.g 2024 -> 2024/2025 to maintain uniformity with other dataframes.
 			elif operation['commandName'] == 'draftyear':
-				Year1 = dfData['Year'].astype(int)
-				Year2 = dfData['Year'].astype(int) + 1
+				#Change if year is past 3000 or before 1700.
+				dfData['Year'] = dfData['Year'].astype(int)
+				dfData = dfData[dfData['Year'] < 3000]
+				dfData = dfData[dfData['Year'] > 1700]
+				Year1 = dfData['Year']
+				Year2 = dfData['Year'] + 1
 				dfData['Season'] = Year1.astype(str) + '/' + Year2.astype(str)
 			else:
 				print(f'operation, {operation['commandName']}, not found.')
@@ -206,11 +210,11 @@ def simplifyFiles(season, teams, leagues, exportDate):
 			#Check if dataframe will be outputed to CSV. Not every file will be exported may loop through and merge with another file.
 			if "Output" in fileData:
 				dfDataFrms[0].to_csv(f'{outfilepath}/csv/{fileData['Output']}.csv', name_function=lambda x: f'{seasonvalue}_{fileData['Output']}{x}.csv', index=False)
-				dfDataFrms[0].to_parquet(f'{outfilepath}/parquet/{fileData['Output']}.parquet', name_function=lambda x: f'{seasonvalue}_{fileData['Output']}{x}.parquet', write_index=False)
+				dfDataFrms[0].to_parquet(f'{outfilepath}/parquet/{fileData['Output']}.parquet', name_function=lambda x: f'{seasonvalue}_{fileData['Output']}{x}.parquet', write_index=False)	
 				#overwrite first element which should always be final store location before exporting to csv or parquet.
 				dfDataFrms[0] = 0
 				fileCount += 1
-				printProgressBar(fileCount, 22, prefix = fileData['Output'])
+				printProgressBar(fileCount, 21, prefix = fileData['Output'])
 
 	sanitizeData()
 
