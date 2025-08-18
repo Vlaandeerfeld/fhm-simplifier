@@ -116,7 +116,11 @@ def simplifyFiles(season, teams, leagues, exportDate):
 			elif operation['commandName'] == 'astype':
 				if operation['range'] == 'Per':
 					for asTypeComm in operation['commValue']:
-						dfData = dfData.astype({asTypeComm['colName']: asTypeComm['colValue']})
+						if asTypeComm['colValue'] =='GR' or asTypeComm['colValue'] == 'GROff' or asTypeComm['colValue'] == 'GRDef':
+							dfData = dfData.astype({asTypeComm['colName']: 'Float64'})
+							dfData = dfData.astype({asTypeComm['colName']: asTypeComm['colValue']})
+						else:
+							dfData = dfData.astype({asTypeComm['colName']: asTypeComm['colValue']})
 				else:
 					dfData = dfData.astype(operation['commValue'][0]['colValue'])
 
@@ -209,7 +213,7 @@ def simplifyFiles(season, teams, leagues, exportDate):
 					dfDataFrms[0] = operationsList(dfDataFrms[0], PostMergesOperations, leagues, teams)
 			#Check if dataframe will be outputed to CSV. Not every file will be exported may loop through and merge with another file.
 			if "Output" in fileData:
-				dfDataFrms[0].to_csv(f'{outfilepath}/csv/{fileData['Output']}.csv', name_function=lambda x: f'{seasonvalue}_{fileData['Output']}{x}.csv', index=False)
+				dfDataFrms[0].to_csv(f'{outfilepath}/csv/{fileData['Output']}.csv', index=False, single_file=True)
 				dfDataFrms[0].to_parquet(f'{outfilepath}/parquet/{fileData['Output']}.parquet', name_function=lambda x: f'{seasonvalue}_{fileData['Output']}{x}.parquet', write_index=False)	
 				#overwrite first element which should always be final store location before exporting to csv or parquet.
 				dfDataFrms[0] = 0

@@ -931,15 +931,15 @@
                         },
                         {
                             "colName": "GR",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "GROff",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "GRDef",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "SOG",
@@ -1221,15 +1221,15 @@
                         },
                         {
                             "colName": "GR",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "GROff",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "GRDef",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "SOG",
@@ -1511,15 +1511,15 @@
                         },
                         {
                             "colName": "GR",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "GROff",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "GRDef",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "SOG",
@@ -1753,13 +1753,13 @@
                         },
                         {
                             "colName": "GR",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         }
                     ]
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "Shutouts", "SVPer", "GR"]
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
                 }
             ],
             "PreStoreIndex": 0,
@@ -1903,13 +1903,13 @@
                         },
                         {
                             "colName": "GR",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         }
                     ]
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "Shutouts", "SVPer", "GR"]
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
                 }
             ],
             "PreStoreIndex": 0,
@@ -2053,13 +2053,13 @@
                         },
                         {
                             "colName": "GR",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         }
                     ]
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "Shutouts", "SVPer", "GR"]
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
                 }
             ],
             "PreStoreIndex": 0,
@@ -4015,7 +4015,7 @@
                         },
                         {
                             "colName": "GR",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "SA",
@@ -4242,15 +4242,15 @@
                         },
                         {
                             "colName": "GR",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "GROff",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "GRDef",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "Goals",
