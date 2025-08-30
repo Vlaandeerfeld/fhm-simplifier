@@ -302,7 +302,7 @@
                         },
                         {
                             "colName": "DOB",
-                            "colValue": "string"
+                            "colValue": "datetime64[ns]"
                         },
                         {
                             "colName": "Birthcity",
@@ -3369,7 +3369,7 @@
                         },
                         {
                             "colName": "Dates",
-                            "colValue": "string"
+                            "colValue": "datetime64[ns]"
                         },
                         {
                             "colName": "HomeId",
@@ -4589,7 +4589,7 @@
                         },
                         {
                             "colName": "DOB",
-                            "colValue": "string"
+                            "colValue": "datetime64[ns]"
                         },
                         {
                             "colName": "Birthcity",

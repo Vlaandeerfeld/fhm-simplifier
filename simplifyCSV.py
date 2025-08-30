@@ -5,6 +5,7 @@
 import dask.dataframe as dd
 #built in python packages
 import json
+from datetime import datetime
 from io import StringIO
 
 # Print iterations progress credit to Greenstick from https://stackoverflow.com/questions/3173320/text-progress-bar-in-terminal-with-block-characters because I could not figure it out.
@@ -49,14 +50,18 @@ def getLeagues(dfTeamData, dfSchedules):
 	season = seasonStart + '/' + seasonEnd
 
 	#Using schedules.csv find last played game and store Dates to add to team lines to find approximate lines at date.
-	dfSchedules = dfSchedules[dfSchedules['Played'].isin(['0'])].head(n=1, compute=True).reset_index()
+	dfSchedules1 = dfSchedules[dfSchedules['Played'].isin(['0'])].head(n=1, compute=True).reset_index()
+	#Default to top date of game listed in dfSchedules which is generally ordered from beginning of season to end.
+	dfSchedules2 = dfSchedules.head(n=1, compute=True).reset_index()
 
 	#If all games played default to end of Season.
-	if dfSchedules.empty:
-		exportDate = '2025-06-30'
+	if dfSchedules1.empty:
+		exportDate = dfSchedules2['Dates'][0]
 	else:
-		exportDate = dfSchedules['Dates'][0]
+		exportDate = dfSchedules1['Dates'][0]
 
+	#export date into datetime format.
+	exportDate = datetime.strptime(exportDate, '%Y-%m-%d')
 
 	#Define leagues that will be included in output files. LeagueIds found in league_data.csv
 	leagues = ['0', '1', '2', '3', '4', '10', '11', '12', '13', '14']
@@ -116,7 +121,8 @@ def simplifyFiles(season, teams, leagues, exportDate):
 			elif operation['commandName'] == 'astype':
 				if operation['range'] == 'Per':
 					for asTypeComm in operation['commValue']:
-						if asTypeComm['colValue'] =='GR' or asTypeComm['colValue'] == 'GROff' or asTypeComm['colValue'] == 'GRDef':
+						#in game boxscore_skater_summary.csv GR columns are given as float as opposed to INT references everywhere else. First convert string to float then appropriate datatype as defined in configure.json.
+						if asTypeComm['colName'] == 'GR' or asTypeComm['colName'] == 'GROff' or asTypeComm['colName'] == 'GRDef':
 							dfData = dfData.astype({asTypeComm['colName']: 'Float64'})
 							dfData = dfData.astype({asTypeComm['colName']: asTypeComm['colValue']})
 						else:
@@ -213,7 +219,7 @@ def simplifyFiles(season, teams, leagues, exportDate):
 					dfDataFrms[0] = operationsList(dfDataFrms[0], PostMergesOperations, leagues, teams)
 			#Check if dataframe will be outputed to CSV. Not every file will be exported may loop through and merge with another file.
 			if "Output" in fileData:
-				dfDataFrms[0].to_csv(f'{outfilepath}/csv/{fileData['Output']}.csv', index=False, single_file=True)
+				dfDataFrms[0].to_csv(f'{outfilepath}/csv/{fileData['Output']}.csv', index=False, date_format='%Y/%m/%d', single_file=True)
 				dfDataFrms[0].to_parquet(f'{outfilepath}/parquet/{fileData['Output']}.parquet', name_function=lambda x: f'{seasonvalue}_{fileData['Output']}{x}.parquet', write_index=False)	
 				#overwrite first element which should always be final store location before exporting to csv or parquet.
 				dfDataFrms[0] = 0

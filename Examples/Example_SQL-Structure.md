@@ -1,5 +1,5 @@
-CREATE DATABASE NHLv5;
-USE NHLv5;
+CREATE DATABASE NHLv6;
+USE NHLv6;
 
 CREATE TABLE leagues(
 	LeagueId SMALLINT UNSIGNED,
@@ -45,7 +45,7 @@ CREATE TABLE players(
 	NickName VARCHAR(30),
 	Height SMALLINT UNSIGNED,
 	Weight SMALLINT UNSIGNED,
-	DOB VARCHAR(10),
+	DOB DATE,
 	Birthcity VARCHAR(100), 
 	Birthstate VARCHAR(100),
 	NationalityOne TEXT,
@@ -208,7 +208,7 @@ CREATE TABLE player_rights(
 
 CREATE TABLE skater_stats_game(
 	LeagueId SMALLINT UNSIGNED,
-	Dates VARCHAR(10),
+	Dates DATE,
 	Types VARCHAR(20),
 	GameId MEDIUMINT UNSIGNED,
 	PlayerId MEDIUMINT UNSIGNED,
@@ -401,7 +401,7 @@ CREATE TABLE skater_stats_ps(
 
 CREATE TABLE goalie_stats_game(
 	LeagueId SMALLINT UNSIGNED,
-	Dates VARCHAR(10),
+	Dates DATE,
 	Types VARCHAR(20),
 	GameId MEDIUMINT UNSIGNED,
 	PlayerId MEDIUMINT UNSIGNED,
@@ -496,7 +496,7 @@ CREATE TABLE staffs(
 	FirstName VARCHAR(30),
 	LastName VARCHAR(30),
 	NickName VARCHAR(30),
-	DOB VARCHAR(10),
+	DOB DATE,
 	Birthcity VARCHAR(100),
 	Birthstate VARCHAR(100),
 	NationalityOne TEXT,
@@ -537,7 +537,7 @@ CREATE TABLE staffs(
 
 CREATE TABLE team_lines(
 	TeamId SMALLINT UNSIGNED,
-	Dates VARCHAR(10),
+	Dates DATE,
 	ESL1LW MEDIUMINT UNSIGNED,
 	ESL1C MEDIUMINT UNSIGNED,
 	ESL1RW MEDIUMINT UNSIGNED,
@@ -691,7 +691,7 @@ CREATE TABLE games_penalties(
 
 CREATE TABLE games_result(
 	LeagueId SMALLINT UNSIGNED,
-	Dates VARCHAR(10),
+	Dates DATE,
 	GameId MEDIUMINT UNSIGNED,
 	HomeId MEDIUMINT UNSIGNED,
 	ScoreHome SMALLINT UNSIGNED,
@@ -810,7 +810,7 @@ CREATE TABLE players_temp(
 	NickName VARCHAR(30),
 	Height SMALLINT UNSIGNED,
 	Weight SMALLINT UNSIGNED,
-	DOB VARCHAR(10),
+	DOB DATE,
 	Birthcity VARCHAR(100), 
 	Birthstate VARCHAR(100),
 	NationalityOne TEXT,
@@ -973,7 +973,7 @@ CREATE TABLE player_rights_temp(
 
 CREATE TABLE skater_stats_game_temp(
 	LeagueId SMALLINT UNSIGNED,
-	Dates VARCHAR(10),
+	Dates DATE,
 	Types VARCHAR(20),
 	GameId MEDIUMINT UNSIGNED,
 	PlayerId MEDIUMINT UNSIGNED,
@@ -1166,7 +1166,7 @@ CREATE TABLE skater_stats_ps_temp(
 
 CREATE TABLE goalie_stats_game_temp(
 	LeagueId SMALLINT UNSIGNED,
-	Dates VARCHAR(10),
+	Dates DATE,
 	Types VARCHAR(20),
 	GameId MEDIUMINT UNSIGNED,
 	PlayerId MEDIUMINT UNSIGNED,
@@ -1261,7 +1261,7 @@ CREATE TABLE staffs_temp(
 	FirstName VARCHAR(30),
 	LastName VARCHAR(30),
 	NickName VARCHAR(30),
-	DOB VARCHAR(10),
+	DOB DATE,
 	Birthcity VARCHAR(100),
 	Birthstate VARCHAR(100),
 	NationalityOne TEXT,
@@ -1302,7 +1302,7 @@ CREATE TABLE staffs_temp(
 
 CREATE TABLE team_lines_temp(
 	TeamId SMALLINT UNSIGNED,
-	Dates VARCHAR(10),
+	Dates DATE,
 	ESL1LW MEDIUMINT UNSIGNED,
 	ESL1C MEDIUMINT UNSIGNED,
 	ESL1RW MEDIUMINT UNSIGNED,
@@ -1456,7 +1456,7 @@ CREATE TABLE games_penalties_temp(
 
 CREATE TABLE games_result_temp(
 	LeagueId SMALLINT UNSIGNED,
-	Dates VARCHAR(10),
+	Dates DATE,
 	GameId MEDIUMINT UNSIGNED,
 	HomeId MEDIUMINT UNSIGNED,
 	ScoreHome SMALLINT UNSIGNED,
