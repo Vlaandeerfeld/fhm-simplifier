@@ -1,3 +1,23 @@
+Upcoming changes:
+
+Remove hardcoded league list and move to configuration file.
+
+More support for different games/versions exports.
+
+fhm-simplifier v0.3.1
+
+Changed date from when all games were played from first pre-season to last game played as was intended originally.
+
+fhm-simplifier v0.3.0
+
+Not compatible with earlier version exports.
+
+Added import of built in datetime python package to change Date strings from import data to datetime format to export.
+
+Columns affected are DOB and Dates specifically.
+
+Changed hardcoded back up date if all games are played to first game played.
+
 fhm-simplifier v0.2.1
 
 Not compatible with earlier version exports.

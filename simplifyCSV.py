@@ -51,8 +51,8 @@ def getLeagues(dfTeamData, dfSchedules):
 
 	#Using schedules.csv find last played game and store Dates to add to team lines to find approximate lines at date.
 	dfSchedules1 = dfSchedules[dfSchedules['Played'].isin(['0'])].head(n=1, compute=True).reset_index()
-	#Default to top date of game listed in dfSchedules which is generally ordered from beginning of season to end.
-	dfSchedules2 = dfSchedules.head(n=1, compute=True).reset_index()
+	#Default to bottom date of game listed in dfSchedules which is generally ordered from beginning of season to end.
+	dfSchedules2 = dfSchedules.tail(n=1, compute=True).reset_index()
 
 	#If all games played default to end of Season.
 	if dfSchedules1.empty:
