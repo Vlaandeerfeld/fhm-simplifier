@@ -3306,7 +3306,7 @@
             "PostMergesOperations": [
                 {
                     "commandName": "order",
-                    "commValue": ["TeamId", "Season", "GP", "Wins", "Losses", "Ties", "OTL", "SOWins", "SOLosses", "Points", "PCT", "Shots", "SA", "SB", "Hits", "GV", "TK", "PIMG", "PP", "PPG", "PPGA", "SH", "SHG", "SHGA", "InjuryDays", "AttTotalHome", "AttTotalAway", "AttAvgHome", "AttAvgAway", "SelloutsHome", "SelloutsAway", "CapacityUsePer"]
+                    "commValue": ["TeamId", "Season", "GP", "Wins", "Losses", "Ties", "OTL", "SOWins", "SOLosses", "Points", "PCT", "GF", "GA", "Shots", "SA", "SB", "Hits", "GV", "TK", "PIMG", "PP", "PPG", "PPGA", "SH", "SHG", "SHGA", "InjuryDays", "AttTotalHome", "AttTotalAway", "AttAvgHome", "AttAvgAway", "SelloutsHome", "SelloutsAway", "CapacityUsePer"]
                 }
             ],
             "Output": "team_stats"
