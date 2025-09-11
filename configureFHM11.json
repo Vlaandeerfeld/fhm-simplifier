@@ -1,0 +1,5093 @@
+{
+    "Version": "FHM11-v11.4.52",
+    "Leagues": ["0", "1", "2", "3", "4", "10", "11", "12", "13", "14"],
+    "numFiles": 21,
+    "filepath": "csv/import_export/",
+    "outfilepath": "simplifiedFiles",
+    "Files": [
+        {
+            "Name": "dfLeagues",
+            "Extract": {
+                "fileName": "league_data.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "LeagueId",
+                    "LeagueName",
+                    "LeagueAbbr"
+                ],
+                "usecols": [
+                    "LeagueId",
+                    "LeagueName",
+                    "LeagueAbbr"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "leagues"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": 3
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "LeagueName",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "LeagueAbbr",
+                            "colValue": "string"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 0
+        },
+        {
+            "Name": "dfConferences",
+            "Extract": {
+                "fileName": "conferences.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "LeagueId",
+                    "ConferenceId",
+                    "ConferenceName"
+                ],
+                "usecols": [
+                    "LeagueId",
+                    "ConferenceId",
+                    "ConferenceName"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": 3
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "leagues"
+                        }
+                    ]
+                },                
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ConferenceId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ConferenceName",
+                            "colValue": "string"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "LeagueId",
+                "how": "left",
+                "mergeIndexes": [0, 1],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            }
+        },
+        {
+            "Name": "dfDivisions",
+            "Extract": {
+                "fileName": "divisions.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "LeagueId",
+                    "ConferenceId",
+                    "DivisionId",
+                    "DivisionName"
+                ],
+                "usecols": [
+                    "LeagueId",
+                    "ConferenceId",
+                    "DivisionId",
+                    "DivisionName"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": 4
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "leagues"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "drop",
+                    "commValue": [
+                        {
+                            "colName": "LeagueId"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "ConferenceId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "DivisionId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "DivisionName",
+                            "colValue": "string"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "ConferenceId",
+                "how": "left",
+                "mergeIndexes": [0, 1],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            },
+            "PostMergesOperations": [
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["LeagueId", "Season", "ConferenceId", "ConferenceName", "DivisionId", "DivisionName", "LeagueName", "LeagueAbbr"]
+                }
+            ],
+            "Output": "leagues"
+        },
+        {
+            "Name": "dfPlayerMaster",
+            "Extract": {
+                "fileName": "player_master.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "TeamId",
+                    "FranchiseId",
+                    "FirstName",
+                    "LastName",
+                    "NickName",
+                    "Height",
+                    "Weight",
+                    "DOB",
+                    "Birthcity",
+                    "Birthstate",
+                    "NationalityOne",
+                    "NationalityTwo",
+                    "NationalityThree",
+                    "Retired",
+                    "Hand",
+                    "Rookie"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "TeamId",
+                    "FirstName",
+                    "LastName",
+                    "NickName",
+                    "Height",
+                    "Weight",
+                    "DOB",
+                    "Birthcity",
+                    "Birthstate",
+                    "NationalityOne",
+                    "NationalityTwo",
+                    "NationalityThree",
+                    "Retired",
+                    "Hand",
+                    "Rookie"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "isnotin",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "-1"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colVal": "season"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Season",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "FirstName",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "LastName",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NickName",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Height",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Weight",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "DOB",
+                            "colValue": "datetime64[ns]"
+                        },
+                        {
+                            "colName": "Birthcity",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Birthstate",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NationalityOne",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NationalityTwo",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NationalityThree",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Retired",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Hand",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Rookie",
+                            "colValue": "Int32"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 0
+        },
+        {
+            "Name": "dfPlayerRatings",
+            "Extract": {
+                "fileName": "player_ratings.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "Goalie",
+                    "LeftD",
+                    "RightD",
+                    "LeftW",
+                    "Center",
+                    "RightW",
+                    "Aggression",
+                    "Bravery",
+                    "Determination",
+                    "Teamplayer",
+                    "Leadership",
+                    "Temperament",
+                    "Professionalism",
+                    "GoalieMentalToughness",
+                    "GoalieStamina",
+                    "Acceleration",
+                    "Agility",
+                    "Balance",
+                    "Speed",
+                    "Stamina",
+                    "Strength",
+                    "Fighting",
+                    "Screening",
+                    "GettingOpen",
+                    "Passing",
+                    "PuckHandling",
+                    "ShootingAccuracy",
+                    "ShootingRange",
+                    "OffensiveRead",
+                    "Checking",
+                    "Faceoffs",
+                    "Hitting",
+                    "Positioning",
+                    "ShotBlocking",
+                    "StickChecking",
+                    "DefensiveRead",
+                    "GoaliePositioning",
+                    "GoaliePassing",
+                    "GoaliePokeChecking",
+                    "GoalieBlocker",
+                    "GoalieGlove",
+                    "GoalieRebound",
+                    "GoalieRecovery",
+                    "GoaliePuckHandling",
+                    "GoalieLowShots",
+                    "GoalieSkating",
+                    "GoalieReflexes",
+                    "Skating",
+                    "Shooting",
+                    "Playmaking",
+                    "Defending",
+                    "Physicality",
+                    "Conditioning",
+                    "Characters",
+                    "HockeySense",
+                    "GoalieTechnique",
+                    "GoalieOverallPositioning",
+                    "Ability",
+                    "Potential"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "Goalie",
+                    "LeftD",
+                    "RightD",
+                    "LeftW",
+                    "Center",
+                    "RightW",
+                    "Aggression",
+                    "Bravery",
+                    "Determination",
+                    "Teamplayer",
+                    "Leadership",
+                    "Temperament",
+                    "Professionalism",
+                    "GoalieMentalToughness",
+                    "GoalieStamina",
+                    "Acceleration",
+                    "Agility",
+                    "Balance",
+                    "Speed",
+                    "Stamina",
+                    "Strength",
+                    "Fighting",
+                    "Screening",
+                    "GettingOpen",
+                    "Passing",
+                    "PuckHandling",
+                    "ShootingAccuracy",
+                    "ShootingRange",
+                    "OffensiveRead",
+                    "Checking",
+                    "Faceoffs",
+                    "Hitting",
+                    "Positioning",
+                    "ShotBlocking",
+                    "StickChecking",
+                    "DefensiveRead",
+                    "GoaliePositioning",
+                    "GoaliePassing",
+                    "GoaliePokeChecking",
+                    "GoalieBlocker",
+                    "GoalieGlove",
+                    "GoalieRebound",
+                    "GoalieRecovery",
+                    "GoaliePuckHandling",
+                    "GoalieLowShots",
+                    "GoalieSkating",
+                    "GoalieReflexes",
+                    "Skating",
+                    "Shooting",
+                    "Playmaking",
+                    "Defending",
+                    "Physicality",
+                    "Conditioning",
+                    "Characters",
+                    "HockeySense",
+                    "GoalieTechnique",
+                    "GoalieOverallPositioning",
+                    "Ability",
+                    "Potential"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": 60
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Goalie",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "LeftD",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "RightD",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "LeftW",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Center",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "RightW",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Aggression",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Bravery",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Determination",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Teamplayer",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Leadership",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Temperament",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Professionalism",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieMentalToughness",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieStamina",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Acceleration",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Agility",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Balance",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Speed",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Stamina",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Strength",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Fighting",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Screening",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GettingOpen",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Passing",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PuckHandling",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ShootingAccuracy",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ShootingRange",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "OffensiveRead",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Checking",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Faceoffs",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Hitting",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Positioning",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ShotBlocking",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "StickChecking",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "DefensiveRead",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoaliePositioning",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoaliePassing",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoaliePokeChecking",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieBlocker",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieGlove",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieRebound",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieRecovery",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoaliePuckHandling",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieLowShots",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieSkating",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieReflexes",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Skating",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Shooting",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Playmaking",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Defending",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Physicality",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Conditioning",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Characters",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "HockeySense",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieTechnique",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GoalieOverallPositioning",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Ability",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "Potential",
+                            "colValue": "Float64"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "PlayerId",
+                "how": "left",
+                "mergeIndexes": [0, 1],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            },
+            "PostMergesOperations": [
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "TeamId", "Season", "FirstName", "LastName", "NickName", "Height", "Weight", "DOB", "Birthcity", "Birthstate", "NationalityOne", "NationalityTwo", "NationalityThree", "Retired", "Hand", "Rookie", "Goalie", "LeftD", "RightD", "LeftW", "Center", "RightW", "Screening", "GettingOpen", "Passing", "PuckHandling", "ShootingAccuracy", "ShootingRange", "OffensiveRead", "Checking", "Faceoffs", "Hitting", "Positioning", "ShotBlocking", "StickChecking", "DefensiveRead", "Acceleration", "Agility", "Balance", "Speed", "Stamina", "Strength", "Fighting", "GoaliePositioning", "GoaliePassing", "GoaliePokeChecking", "GoalieBlocker", "GoalieGlove", "GoalieRebound", "GoalieRecovery", "GoaliePuckHandling", "GoalieLowShots", "GoalieSkating", "GoalieReflexes", "GoalieMentalToughness", "GoalieStamina", "Aggression", "Bravery", "Determination", "Teamplayer", "Leadership", "Temperament", "Professionalism", "Skating", "Shooting", "Playmaking", "Defending", "Physicality", "Conditioning", "Characters", "HockeySense", "GoalieTechnique", "GoalieOverallPositioning", "Ability", "Potential"]
+                }
+            ],
+            "Output": "players"
+        },
+        {
+            "Name": "dfPlayerSkaterRS",
+            "Extract": {
+                "fileName": "player_skater_stats_rs.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "TeamId",
+                    "FranchiseId",
+                    "GP",
+                    "Goals",
+                    "Assists",
+                    "PlusMinus",
+                    "PIM",
+                    "PPG",
+                    "PPA",
+                    "SHG",
+                    "SHA",
+                    "Fights",
+                    "FightsWon",
+                    "Hits",
+                    "GV",
+                    "TK",
+                    "SB",
+                    "GR",
+                    "GROff",
+                    "GRDef",
+                    "SOG",
+                    "TOI",
+                    "PPTOI",
+                    "SHTOI",
+                    "PDO",
+                    "GF60",
+                    "GA60",
+                    "SF60",
+                    "SA60",
+                    "CF",
+                    "CA",
+                    "CFPer",
+                    "CFPerRel",
+                    "FF",
+                    "FA",
+                    "FFPer",
+                    "FFPerRel",
+                    "GWG",
+                    "FO",
+                    "FOW"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "TeamId",
+                    "GP",
+                    "Goals",
+                    "Assists",
+                    "PlusMinus",
+                    "PIM",
+                    "PPG",
+                    "PPA",
+                    "SHG",
+                    "SHA",
+                    "Fights",
+                    "FightsWon",
+                    "Hits",
+                    "GV",
+                    "TK",
+                    "SB",
+                    "GR",
+                    "GROff",
+                    "GRDef",
+                    "SOG",
+                    "TOI",
+                    "PPTOI",
+                    "SHTOI",
+                    "PDO",
+                    "GF60",
+                    "GA60",
+                    "SF60",
+                    "SA60",
+                    "CF",
+                    "CA",
+                    "CFPer",
+                    "CFPerRel",
+                    "FF",
+                    "FA",
+                    "FFPer",
+                    "FFPerRel",
+                    "GWG",
+                    "FO",
+                    "FOW"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "40"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                }, 
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Season",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "GP",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Goals",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Assists",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PlusMinus",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PIM",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Fights",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FightsWon",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Hits",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GV",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TK",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SB",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GR",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GROff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GRDef",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPTOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHTOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PDO",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GF60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GA60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "SF60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "SA60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "CF",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CFPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "CFPerRel",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "FF",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FFPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "FFPerRel",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GWG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FO",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FOW",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Goals", "Assists", "PlusMinus", "PIM", "PPG", "PPA", "SHG", "SHA", "Fights", "FightsWon", "Hits", "GV", "TK", "SB", "GR", "GROff", "GRDef", "SOG", "TOI", "PPTOI", "SHTOI", "PDO", "GF60", "GA60", "SF60", "SA60", "CF", "CA", "CFPer", "CFPerRel", "FF", "FA", "FFPer", "FFPerRel", "GWG", "FO", "FOW"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "skater_stats_rs"
+        },
+        {
+            "Name": "dfPlayerSkaterPO",
+            "Extract": {
+                "fileName": "player_skater_stats_po.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "TeamId",
+                    "FranchiseId",
+                    "GP",
+                    "Goals",
+                    "Assists",
+                    "PlusMinus",
+                    "PIM",
+                    "PPG",
+                    "PPA",
+                    "SHG",
+                    "SHA",
+                    "Fights",
+                    "FightsWon",
+                    "Hits",
+                    "GV",
+                    "TK",
+                    "SB",
+                    "GR",
+                    "GROff",
+                    "GRDef",
+                    "SOG",
+                    "TOI",
+                    "PPTOI",
+                    "SHTOI",
+                    "PDO",
+                    "GF60",
+                    "GA60",
+                    "SF60",
+                    "SA60",
+                    "CF",
+                    "CA",
+                    "CFPer",
+                    "CFPerRel",
+                    "FF",
+                    "FA",
+                    "FFPer",
+                    "FFPerRel",
+                    "GWG",
+                    "FO",
+                    "FOW"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "TeamId",
+                    "GP",
+                    "Goals",
+                    "Assists",
+                    "PlusMinus",
+                    "PIM",
+                    "PPG",
+                    "PPA",
+                    "SHG",
+                    "SHA",
+                    "Fights",
+                    "FightsWon",
+                    "Hits",
+                    "GV",
+                    "TK",
+                    "SB",
+                    "GR",
+                    "GROff",
+                    "GRDef",
+                    "SOG",
+                    "TOI",
+                    "PPTOI",
+                    "SHTOI",
+                    "PDO",
+                    "GF60",
+                    "GA60",
+                    "SF60",
+                    "SA60",
+                    "CF",
+                    "CA",
+                    "CFPer",
+                    "CFPerRel",
+                    "FF",
+                    "FA",
+                    "FFPer",
+                    "FFPerRel",
+                    "GWG",
+                    "FO",
+                    "FOW"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "40"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                }, 
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Season",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "GP",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Goals",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Assists",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PlusMinus",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PIM",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Fights",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FightsWon",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Hits",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GV",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TK",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SB",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GR",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GROff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GRDef",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPTOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHTOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PDO",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GF60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GA60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "SF60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "SA60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "CF",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CFPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "CFPerRel",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "FF",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FFPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "FFPerRel",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GWG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FO",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FOW",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Goals", "Assists", "PlusMinus", "PIM", "PPG", "PPA", "SHG", "SHA", "Fights", "FightsWon", "Hits", "GV", "TK", "SB", "GR", "GROff", "GRDef", "SOG", "TOI", "PPTOI", "SHTOI", "PDO", "GF60", "GA60", "SF60", "SA60", "CF", "CA", "CFPer", "CFPerRel", "FF", "FA", "FFPer", "FFPerRel", "GWG", "FO", "FOW"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "skater_stats_po"
+        },
+        {
+            "Name": "dfPlayerSkaterPS",
+            "Extract": {
+                "fileName": "player_skater_stats_ps.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "TeamId",
+                    "FranchiseId",
+                    "GP",
+                    "Goals",
+                    "Assists",
+                    "PlusMinus",
+                    "PIM",
+                    "PPG",
+                    "PPA",
+                    "SHG",
+                    "SHA",
+                    "Fights",
+                    "FightsWon",
+                    "Hits",
+                    "GV",
+                    "TK",
+                    "SB",
+                    "GR",
+                    "GROff",
+                    "GRDef",
+                    "SOG",
+                    "TOI",
+                    "PPTOI",
+                    "SHTOI",
+                    "PDO",
+                    "GF60",
+                    "GA60",
+                    "SF60",
+                    "SA60",
+                    "CF",
+                    "CA",
+                    "CFPer",
+                    "CFPerRel",
+                    "FF",
+                    "FA",
+                    "FFPer",
+                    "FFPerRel",
+                    "GWG",
+                    "FO",
+                    "FOW"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "TeamId",
+                    "GP",
+                    "Goals",
+                    "Assists",
+                    "PlusMinus",
+                    "PIM",
+                    "PPG",
+                    "PPA",
+                    "SHG",
+                    "SHA",
+                    "Fights",
+                    "FightsWon",
+                    "Hits",
+                    "GV",
+                    "TK",
+                    "SB",
+                    "GR",
+                    "GROff",
+                    "GRDef",
+                    "SOG",
+                    "TOI",
+                    "PPTOI",
+                    "SHTOI",
+                    "PDO",
+                    "GF60",
+                    "GA60",
+                    "SF60",
+                    "SA60",
+                    "CF",
+                    "CA",
+                    "CFPer",
+                    "CFPerRel",
+                    "FF",
+                    "FA",
+                    "FFPer",
+                    "FFPerRel",
+                    "GWG",
+                    "FO",
+                    "FOW"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "40"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                }, 
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Season",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "GP",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Goals",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Assists",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PlusMinus",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PIM",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Fights",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FightsWon",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Hits",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GV",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TK",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SB",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GR",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GROff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GRDef",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPTOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHTOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PDO",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GF60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GA60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "SF60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "SA60",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "CF",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CFPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "CFPerRel",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "FF",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FFPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "FFPerRel",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GWG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FO",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FOW",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Goals", "Assists", "PlusMinus", "PIM", "PPG", "PPA", "SHG", "SHA", "Fights", "FightsWon", "Hits", "GV", "TK", "SB", "GR", "GROff", "GRDef", "SOG", "TOI", "PPTOI", "SHTOI", "PDO", "GF60", "GA60", "SF60", "SA60", "CF", "CA", "CFPer", "CFPerRel", "FF", "FA", "FFPer", "FFPerRel", "GWG", "FO", "FOW"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "skater_stats_ps"
+        },
+        {
+            "Name": "dfPlayerGoalieRS",
+            "Extract": {
+                "fileName": "player_goalie_stats_rs.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "TeamId",
+                    "FranchiseId",
+                    "GP",
+                    "Starts",
+                    "TOI",
+                    "Wins",
+                    "Losses",
+                    "OT",
+                    "SA",
+                    "Saves",
+                    "GA",
+                    "GAA",
+                    "Shutouts",
+                    "SVPer",
+                    "GR"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "TeamId",
+                    "GP",
+                    "Starts",
+                    "TOI",
+                    "Wins",
+                    "Losses",
+                    "OT",
+                    "SA",
+                    "Saves",
+                    "GA",
+                    "GAA",
+                    "Shutouts",
+                    "SVPer",
+                    "GR"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "15"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                }, 
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "replace",
+                    "commValue": [
+                        {
+                            "colName": "SVPer",
+                            "replace": ".00nan",
+                            "replacewith": "0"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Season",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "GP",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Starts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Wins",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Losses",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "OT",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Saves",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GAA",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "Shutouts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SVPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "Shutouts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GR",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "goalie_stats_rs"
+        },
+        {
+            "Name": "dfPlayerGoaliePO",
+            "Extract": {
+                "fileName": "player_goalie_stats_po.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "TeamId",
+                    "FranchiseId",
+                    "GP",
+                    "Starts",
+                    "TOI",
+                    "Wins",
+                    "Losses",
+                    "OT",
+                    "SA",
+                    "Saves",
+                    "GA",
+                    "GAA",
+                    "Shutouts",
+                    "SVPer",
+                    "GR"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "TeamId",
+                    "GP",
+                    "Starts",
+                    "TOI",
+                    "Wins",
+                    "Losses",
+                    "OT",
+                    "SA",
+                    "Saves",
+                    "GA",
+                    "GAA",
+                    "Shutouts",
+                    "SVPer",
+                    "GR"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "15"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                }, 
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "replace",
+                    "commValue": [
+                        {
+                            "colName": "SVPer",
+                            "replace": ".00nan",
+                            "replacewith": "0"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Season",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "GP",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Starts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Wins",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Losses",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "OT",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Saves",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GAA",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "Shutouts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SVPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GR",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "goalie_stats_po"
+        },
+        {
+            "Name": "dfPlayerGoaliePS",
+            "Extract": {
+                "fileName": "player_goalie_stats_ps.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "TeamId",
+                    "FranchiseId",
+                    "GP",
+                    "Starts",
+                    "TOI",
+                    "Wins",
+                    "Losses",
+                    "OT",
+                    "SA",
+                    "Saves",
+                    "GA",
+                    "GAA",
+                    "Shutouts",
+                    "SVPer",
+                    "GR"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "TeamId",
+                    "GP",
+                    "Starts",
+                    "TOI",
+                    "Wins",
+                    "Losses",
+                    "OT",
+                    "SA",
+                    "Saves",
+                    "GA",
+                    "GAA",
+                    "Shutouts",
+                    "SVPer",
+                    "GR"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "15"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                }, 
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "replace",
+                    "commValue": [
+                        {
+                            "colName": "SVPer",
+                            "replace": ".00nan",
+                            "replacewith": "0"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Season",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "GP",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Starts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Wins",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Losses",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "OT",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Saves",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GAA",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "Shutouts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SVPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "GR",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "goalie_stats_ps"
+        },
+        {
+            "Name": "dfPlayerContract",
+            "Extract": {
+                "fileName": "player_contract.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "TeamId",
+                    "NTC",
+                    "NMC",
+                    "ELC",
+                    "UFA",
+                    "Scholarship",
+                    "AverageSalary",
+                    "MajorCurrentYear",
+                    "MajorNextYear",
+                    "Major3rdYear",
+                    "Major4thYear",
+                    "Major5thYear",
+                    "Major6thYear",
+                    "Major7thYear",
+                    "Major8thYear",
+                    "Major9thYear",
+                    "Major10thYear",
+                    "Major11thYear",
+                    "Major12thYear",
+                    "Major13thYear",
+                    "Major14thYear",
+                    "MinorCurrentYear",
+                    "MinorNextYear",
+                    "Minor3rdYear",
+                    "Minor4thYear",
+                    "Minor5thYear",
+                    "Minor6thYear",
+                    "Minor7thYear",
+                    "Minor8thYear",
+                    "Minor9thYear",
+                    "Minor10thYear",
+                    "Minor11thYear",
+                    "Minor12thYear",
+                    "Minor13thYear",
+                    "Minor14thYear"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "TeamId",
+                    "NTC",
+                    "NMC",
+                    "ELC",
+                    "UFA",
+                    "Scholarship",
+                    "AverageSalary",
+                    "MajorCurrentYear",
+                    "MajorNextYear",
+                    "Major3rdYear",
+                    "Major4thYear",
+                    "Major5thYear",
+                    "Major6thYear",
+                    "Major7thYear",
+                    "Major8thYear",
+                    "Major9thYear",
+                    "Major10thYear",
+                    "Major11thYear",
+                    "Major12thYear",
+                    "Major13thYear",
+                    "Major14thYear",
+                    "MinorCurrentYear",
+                    "MinorNextYear",
+                    "Minor3rdYear",
+                    "Minor4thYear",
+                    "Minor5thYear",
+                    "Minor6thYear",
+                    "Minor7thYear",
+                    "Minor8thYear",
+                    "Minor9thYear",
+                    "Minor10thYear",
+                    "Minor11thYear",
+                    "Minor12thYear",
+                    "Minor13thYear",
+                    "Minor14thYear"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "36"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                }, 
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "NTC",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NMC",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "ELC",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "UFA",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Scholarship",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "AverageSalary",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "MajorCurrentYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "MajorNextYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major3rdYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major4thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major5thYear",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "Major6thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major7thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major8thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major9thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major10thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major11thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major12thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major13thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major14thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "MinorCurrentYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "MinorNextYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor3rdYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor4thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor5thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor6thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor7thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor8thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor9thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor10thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor11thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor12thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor13thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor14thYear",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "replace",
+                    "commValue": [
+                        {
+                            "colName": "All",
+                            "replace": -1,
+                            "replacewith": "None"
+                        },
+                        {
+                            "colName": "Scholarship",
+                            "replace": "-",
+                            "replacewith": "No"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "TeamId", "Season", "NTC", "NMC", "ELC", "UFA", "Scholarship", "AverageSalary", "MajorCurrentYear", "MajorNextYear", "Major3rdYear", "Major4thYear", "Major5thYear", "Major6thYear", "Major7thYear", "Major8thYear", "Major9thYear", "Major10thYear", "Major11thYear", "Major12thYear", "Major13thYear", "Major14thYear", "MinorCurrentYear", "MinorNextYear", "Minor3rdYear", "Minor4thYear", "Minor5thYear", "Minor6thYear", "Minor7thYear", "Minor8thYear", "Minor9thYear", "Minor10thYear", "Minor11thYear", "Minor12thYear", "Minor13thYear", "Minor14thYear"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "contracts"
+        },
+        {
+            "Name": "dfPlayerContractRenewed",
+            "Extract": {
+                "fileName": "player_contract_renewed.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "TeamId",
+                    "NTC",
+                    "NMC",
+                    "ELC",
+                    "UFA",
+                    "Scholarship",
+                    "AverageSalary",
+                    "MajorNextYear",
+                    "Major3rdYear",
+                    "Major4thYear",
+                    "Major5thYear",
+                    "Major6thYear",
+                    "Major7thYear",
+                    "Major8thYear",
+                    "Major9thYear",
+                    "Major10thYear",
+                    "Major11thYear",
+                    "Major12thYear",
+                    "Major13thYear",
+                    "Major14thYear",
+                    "Major15thYear",
+                    "MinorNextYear",
+                    "Minor3rdYear",
+                    "Minor4thYear",
+                    "Minor5thYear",
+                    "Minor6thYear",
+                    "Minor7thYear",
+                    "Minor8thYear",
+                    "Minor9thYear",
+                    "Minor10thYear",
+                    "Minor11thYear",
+                    "Minor12thYear",
+                    "Minor13thYear",
+                    "Minor14thYear",
+                    "Minor15thYear"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "TeamId",
+                    "NTC",
+                    "NMC",
+                    "ELC",
+                    "UFA",
+                    "Scholarship",
+                    "AverageSalary",
+                    "MajorNextYear",
+                    "Major3rdYear",
+                    "Major4thYear",
+                    "Major5thYear",
+                    "Major6thYear",
+                    "Major7thYear",
+                    "Major8thYear",
+                    "Major9thYear",
+                    "Major10thYear",
+                    "Major11thYear",
+                    "Major12thYear",
+                    "Major13thYear",
+                    "Major14thYear",
+                    "Major15thYear",
+                    "MinorNextYear",
+                    "Minor3rdYear",
+                    "Minor4thYear",
+                    "Minor5thYear",
+                    "Minor6thYear",
+                    "Minor7thYear",
+                    "Minor8thYear",
+                    "Minor9thYear",
+                    "Minor10thYear",
+                    "Minor11thYear",
+                    "Minor12thYear",
+                    "Minor13thYear",
+                    "Minor14thYear",
+                    "Minor15thYear"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "36"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                }, 
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "NTC",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NMC",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "ELC",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "UFA",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Scholarship",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "AverageSalary",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "MajorNextYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major3rdYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major4thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major5thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major6thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major7thYear",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "Major8thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major9thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major10thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major11thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major12thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major13thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major14thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Major15thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "MinorNextYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor3rdYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor4thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor5thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor6thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor7thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor8thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor9thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor10thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor11thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor12thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor13thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor14thYear",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Minor15thYear",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "replace",
+                    "commValue": [
+                        {
+                            "colName": "All",
+                            "replace": -1,
+                            "replacewith": "None"
+                        },
+                        {
+                            "colName": "Scholarship",
+                            "replace": "-",
+                            "replacewith": "No"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "TeamId",  "Season", "NTC", "NMC", "ELC", "UFA", "Scholarship", "AverageSalary", "MajorNextYear", "Major3rdYear", "Major4thYear", "Major5thYear", "Major6thYear", "Major7thYear", "Major8thYear", "Major9thYear", "Major10thYear", "Major11thYear", "Major12thYear", "Major13thYear", "Major14thYear", "Major15thYear", "MinorNextYear", "Minor3rdYear", "Minor4thYear", "Minor5thYear", "Minor6thYear", "Minor7thYear", "Minor8thYear", "Minor9thYear", "Minor10thYear", "Minor11thYear", "Minor12thYear", "Minor13thYear", "Minor14thYear", "Minor15thYear"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "contracts_renewed"
+        },
+        {
+            "Name": "dfTeamData",
+            "Extract": {
+                "fileName": "team_data.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "TeamId",
+                    "LeagueId",
+                    "TeamName",
+                    "TeamNickname",
+                    "TeamAbbr",
+                    "ParentTeam1",
+                    "ParentTeam2",
+                    "ParentTeam3",
+                    "ParentTeam4",
+                    "ParentTeam5",
+                    "ParentTeam6",
+                    "ParentTeam7",
+                    "ParentTeam8",
+                    "PrimaryColour",
+                    "SecondaryColour",
+                    "TextColour",
+                    "ConferenceId",
+                    "DivisionId"
+                ],
+                "usecols": [
+                    "TeamId",
+                    "LeagueId",
+                    "TeamName",
+                    "TeamNickname",
+                    "TeamAbbr",
+                    "ParentTeam1",
+                    "ParentTeam2",
+                    "ParentTeam3",
+                    "ParentTeam4",
+                    "ParentTeam5",
+                    "ParentTeam6",
+                    "ParentTeam7",
+                    "ParentTeam8",
+                    "PrimaryColour",
+                    "SecondaryColour",
+                    "TextColour",
+                    "ConferenceId",
+                    "DivisionId"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                        "colName": "TeamId",
+                        "colValue": "teams"
+                        }
+                    ]
+                }, 
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamName",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "TeamNickname",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "TeamAbbr",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "ConferenceId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "DivisionId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ParentTeam1",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ParentTeam2",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ParentTeam3",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ParentTeam4",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ParentTeam5",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ParentTeam6",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ParentTeam7",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ParentTeam8",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PrimaryColour",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "SecondaryColour",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "TextColour",
+                            "colValue": "string"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "replace",
+                    "commValue": [
+                        {
+                            "colName": "All",
+                            "replace": -1,
+                            "replacewith": "None"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["TeamId", "Season", "TeamName", "TeamNickname", "TeamAbbr", "LeagueId", "ConferenceId", "DivisionId", "ParentTeam1", "ParentTeam2", "ParentTeam3", "ParentTeam4", "ParentTeam5", "ParentTeam6", "ParentTeam7", "ParentTeam8", "PrimaryColour", "SecondaryColour", "TextColour"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "teams"
+        },
+        {
+            "Name": "dfTeamLines",
+            "Extract": {
+                "fileName": "team_lines.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "TeamId",
+                    "ESL1LW",
+                    "ESL1C",
+                    "ESL1RW",
+                    "ESL1LD",
+                    "ESL1RD",
+                    "ESL2LW",
+                    "ESL2C",
+                    "ESL2RW",
+                    "ESL2LD",
+                    "ESL2RD",
+                    "ESL3LW",
+                    "ESL3C",
+                    "ESL3RW",
+                    "ESL3LD",
+                    "ESL3RD",
+                    "ESL4LW",
+                    "ESL4C",
+                    "ESL4RW",
+                    "ESL4LD",
+                    "ESL4RD",
+                    "PP5on4L1LW",
+                    "PP5on4L1C",
+                    "PP5on4L1RW",
+                    "PP5on4L1LD",
+                    "PP5on4L1RD",
+                    "PP5on4L2LW",
+                    "PP5on4L2C",
+                    "PP5on4L2RW",
+                    "PP5on4L2LD",
+                    "PP5on4L2RD",
+                    "PP5on3L1LW",
+                    "PP5on3L1C",
+                    "PP5on3L1RW",
+                    "PP5on3L1LD",
+                    "PP5on3L1RD",
+                    "PP5on3L2LW",
+                    "PP5on3L2C",
+                    "PP5on3L2RW",
+                    "PP5on3L2LD",
+                    "PP5on3L2RD",
+                    "PP4on3L1F1",
+                    "PP4on3L1F2",
+                    "PP4on3L1LD",
+                    "PP4on3L1RD",
+                    "PP4on3L2F1",
+                    "PP4on3L2F2",
+                    "PP4on3L2LD",
+                    "PP4on3L2RD",
+                    "PK4on5L1F1",
+                    "PK4on5L1F2",
+                    "PK4on5L1LD",
+                    "PK4on5L1RD",
+                    "PK4on5L2F1",
+                    "PK4on5L2F2",
+                    "PK4on5L2LD",
+                    "PK4on5L2RD",
+                    "PK4on5L3F1",
+                    "PK4on5L3F2",
+                    "PK4on5L3LD",
+                    "PK4on5L3RD",
+                    "PK3on5L1F1",
+                    "PK3on5L1LD",
+                    "PK3on5L1RD",
+                    "PK3on5L2F1",
+                    "PK3on5L2LD",
+                    "PK3on5L2RD",
+                    "PK3on4L1F1",
+                    "PK3on4L1LD",
+                    "PK3on4L1RD",
+                    "PK3on4L2F1",
+                    "PK3on4L2LD",
+                    "PK3on4L2RD",
+                    "4on4L1F1",
+                    "4on4L1F2",
+                    "4on4L1LD",
+                    "4on4L1RD",
+                    "4on4L2F1",
+                    "4on4L2F2",
+                    "4on4L2LD",
+                    "4on4L2RD",
+                    "3on3L1F1",
+                    "3on3L1LD",
+                    "3on3L1RD",
+                    "3on3L2F1",
+                    "3on3L2LD",
+                    "3on3L2RD",
+                    "Shootout1",
+                    "Shootout2",
+                    "Shootout3",
+                    "Shootout4",
+                    "Shootout5",
+                    "Goalie1",
+                    "Goalie2",
+                    "ExtraAttacker1",
+                    "ExtraAttacker2"
+                ],
+                "usecols": [
+                    "TeamId",
+                    "ESL1LW",
+                    "ESL1C",
+                    "ESL1RW",
+                    "ESL1LD",
+                    "ESL1RD",
+                    "ESL2LW",
+                    "ESL2C",
+                    "ESL2RW",
+                    "ESL2LD",
+                    "ESL2RD",
+                    "ESL3LW",
+                    "ESL3C",
+                    "ESL3RW",
+                    "ESL3LD",
+                    "ESL3RD",
+                    "ESL4LW",
+                    "ESL4C",
+                    "ESL4RW",
+                    "ESL4LD",
+                    "ESL4RD",
+                    "PP5on4L1LW",
+                    "PP5on4L1C",
+                    "PP5on4L1RW",
+                    "PP5on4L1LD",
+                    "PP5on4L1RD",
+                    "PP5on4L2LW",
+                    "PP5on4L2C",
+                    "PP5on4L2RW",
+                    "PP5on4L2LD",
+                    "PP5on4L2RD",
+                    "PP5on3L1LW",
+                    "PP5on3L1C",
+                    "PP5on3L1RW",
+                    "PP5on3L1LD",
+                    "PP5on3L1RD",
+                    "PP5on3L2LW",
+                    "PP5on3L2C",
+                    "PP5on3L2RW",
+                    "PP5on3L2LD",
+                    "PP5on3L2RD",
+                    "PP4on3L1F1",
+                    "PP4on3L1F2",
+                    "PP4on3L1LD",
+                    "PP4on3L1RD",
+                    "PP4on3L2F1",
+                    "PP4on3L2F2",
+                    "PP4on3L2LD",
+                    "PP4on3L2RD",
+                    "PK4on5L1F1",
+                    "PK4on5L1F2",
+                    "PK4on5L1LD",
+                    "PK4on5L1RD",
+                    "PK4on5L2F1",
+                    "PK4on5L2F2",
+                    "PK4on5L2LD",
+                    "PK4on5L2RD",
+                    "PK4on5L3F1",
+                    "PK4on5L3F2",
+                    "PK4on5L3LD",
+                    "PK4on5L3RD",
+                    "PK3on5L1F1",
+                    "PK3on5L1LD",
+                    "PK3on5L1RD",
+                    "PK3on5L2F1",
+                    "PK3on5L2LD",
+                    "PK3on5L2RD",
+                    "PK3on4L1F1",
+                    "PK3on4L1LD",
+                    "PK3on4L1RD",
+                    "PK3on4L2F1",
+                    "PK3on4L2LD",
+                    "PK3on4L2RD",
+                    "4on4L1F1",
+                    "4on4L1F2",
+                    "4on4L1LD",
+                    "4on4L1RD",
+                    "4on4L2F1",
+                    "4on4L2F2",
+                    "4on4L2LD",
+                    "4on4L2RD",
+                    "3on3L1F1",
+                    "3on3L1LD",
+                    "3on3L1RD",
+                    "3on3L2F1",
+                    "3on3L2LD",
+                    "3on3L2RD",
+                    "Shootout1",
+                    "Shootout2",
+                    "Shootout3",
+                    "Shootout4",
+                    "Shootout5",
+                    "Goalie1",
+                    "Goalie2",
+                    "ExtraAttacker1",
+                    "ExtraAttacker2"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "All",
+                    "commValue": [
+                        {
+                            "colName": "All",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "assign",
+                    "colName": "Dates",
+                    "colValue": "date"
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["TeamId", "Dates", "ESL1LW", "ESL1C", "ESL1RW", "ESL1LD", "ESL1RD", "ESL2LW", "ESL2C", "ESL2RW", "ESL2LD", "ESL2RD", "ESL3LW", "ESL3C", "ESL3RW", "ESL3LD", "ESL3RD", "ESL4LW", "ESL4C", "ESL4RW", "ESL4LD", "ESL4RD", "PP5on4L1LW", "PP5on4L1C", "PP5on4L1RW", "PP5on4L1LD", "PP5on4L1RD", "PP5on4L2LW", "PP5on4L2C", "PP5on4L2RW", "PP5on4L2LD", "PP5on4L2RD", "PP5on3L1LW", "PP5on3L1C", "PP5on3L1RW", "PP5on3L1LD", "PP5on3L1RD", "PP5on3L2LW", "PP5on3L2C", "PP5on3L2RW", "PP5on3L2LD", "PP5on3L2RD", "PP4on3L1F1", "PP4on3L1F2", "PP4on3L1LD", "PP4on3L1RD", "PP4on3L2F1", "PP4on3L2F2", "PP4on3L2LD", "PP4on3L2RD", "PK4on5L1F1", "PK4on5L1F2", "PK4on5L1LD", "PK4on5L1RD", "PK4on5L2F1", "PK4on5L2F2", "PK4on5L2LD", "PK4on5L2RD", "PK4on5L3F1", "PK4on5L3F2", "PK4on5L3LD", "PK4on5L3RD", "PK3on5L1F1", "PK3on5L1LD", "PK3on5L1RD", "PK3on5L2F1", "PK3on5L2LD", "PK3on5L2RD", "PK3on4L1F1", "PK3on4L1LD", "PK3on4L1RD", "PK3on4L2F1", "PK3on4L2LD", "PK3on4L2RD", "4on4L1F1", "4on4L1F2", "4on4L1LD", "4on4L1RD", "4on4L2F1", "4on4L2F2", "4on4L2LD", "4on4L2RD", "3on3L1F1", "3on3L1LD", "3on3L1RD", "3on3L2F1", "3on3L2LD", "3on3L2RD", "Shootout1", "Shootout2", "Shootout3", "Shootout4", "Shootout5", "Goalie1", "Goalie2", "ExtraAttacker1", "ExtraAttacker2"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "team_lines"
+        },
+        {
+            "Name": "dfTeamStats",
+            "Extract": {
+                "fileName": "team_stats.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "TeamId",
+                    "GP",
+                    "GF",
+                    "GA",
+                    "Shots",
+                    "SA",
+                    "FOPer",
+                    "SB",
+                    "Hits",
+                    "TK",
+                    "GV",
+                    "InjuryDays",
+                    "PIMG",
+                    "PP",
+                    "PPG",
+                    "SHGA",
+                    "SH",
+                    "PPGA",
+                    "SHG",
+                    "AttTotalHome",
+                    "AttTotalAway",
+                    "AttAvgHome",
+                    "AttAvgAway",
+                    "SelloutsHome",
+                    "SelloutsAway",
+                    "CapacityUsePer"
+                ],
+                "usecols": [
+                    "TeamId",
+                    "GP",
+                    "GF",
+                    "GA",
+                    "Shots",
+                    "SA",
+                    "FOPer",
+                    "SB",
+                    "Hits",
+                    "TK",
+                    "GV",
+                    "InjuryDays",
+                    "PIMG",
+                    "PP",
+                    "PPG",
+                    "SHGA",
+                    "SH",
+                    "PPGA",
+                    "SHG",
+                    "AttTotalHome",
+                    "AttTotalAway",
+                    "AttAvgHome",
+                    "AttAvgAway",
+                    "SelloutsHome",
+                    "SelloutsAway",
+                    "CapacityUsePer"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "26"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GP",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GF",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Shots",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FOPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "SB",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Hits",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TK",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GV",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "InjuryDays",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PIMG",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "PP",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHGA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SH",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "AttTotalHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "AttTotalAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "AttAvgHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "AttAvgAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SelloutsHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SelloutsAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CapacityUsePer",
+                            "colValue": "Int32"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 0
+        },
+        {
+            "Name": "dfTeamRecords",
+            "Extract": {
+                "fileName": "team_records.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "LeagueId",
+                    "TeamId",
+                    "ConfId",
+                    "DivId",
+                    "Wins",
+                    "Losses",
+                    "Ties",
+                    "OTL",
+                    "SOWins",
+                    "SOLosses",
+                    "Points",
+                    "GF",
+                    "GA",
+                    "PCT"
+                ],
+                "usecols": [
+                    "TeamId",
+                    "Wins",
+                    "Losses",
+                    "Ties",
+                    "OTL",
+                    "SOWins",
+                    "SOLosses",
+                    "Points",
+                    "PCT"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "9"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Wins",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Losses",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Ties",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "OTL",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOWins",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOLosses",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Points",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PCT",
+                            "colValue": "Float64"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                }
+            ],
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "TeamId",
+                "how": "left",
+                "mergeIndexes": [0, 1],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            },
+            "PostMergesOperations": [
+                {
+                    "commandName": "order",
+                    "commValue": ["TeamId", "Season", "GP", "Wins", "Losses", "Ties", "OTL", "SOWins", "SOLosses", "Points", "PCT", "GF", "GA", "Shots", "SA", "SB", "Hits", "GV", "TK", "PIMG", "PP", "PPG", "PPGA", "SH", "SHG", "SHGA", "InjuryDays", "AttTotalHome", "AttTotalAway", "AttAvgHome", "AttAvgAway", "SelloutsHome", "SelloutsAway", "CapacityUsePer"]
+                }
+            ],
+            "Output": "team_stats"
+        },
+        {
+            "Name": "dfSchedules",
+            "Extract": {
+                "fileName": "schedules.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "LeagueId",
+                    "Dates",
+                    "HomeId",
+                    "ScoreHome",
+                    "AwayId",
+                    "ScoreAway",
+                    "Types",
+                    "Played",
+                    "OT",
+                    "SO",
+                    "GameId"
+                ],
+                "usecols": [
+                    "LeagueId",
+                    "Dates",
+                    "HomeId",
+                    "ScoreHome",
+                    "AwayId",
+                    "ScoreAway",
+                    "Types",
+                    "Played",
+                    "OT",
+                    "SO",
+                    "GameId"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "11"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "leagues"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Dates",
+                            "colValue": "datetime64[ns]"
+                        },
+                        {
+                            "colName": "HomeId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "AwayId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Types",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Played",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "OT",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SO",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GameId",
+                            "colValue": "Int32"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 3
+        },
+        {
+            "Name": "dfBoxGameSummary",
+            "Extract": {
+                "fileName": "boxscore_summary.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "GameId",
+                    "DateYear",
+                    "DateMonth",
+                    "DateDay",
+                    "Arena",
+                    "Attendance",
+                    "HomeId",
+                    "AwayId",
+                    "ScoreHome",
+                    "ScoreAway",
+                    "ScoreHomeP1",
+                    "ScoreHomeP2",
+                    "ScoreHomeP3",
+                    "ScoreHomeOT",
+                    "ScoreHomeSO",
+                    "ScoreAwayP1",
+                    "ScoreAwayP2",
+                    "ScoreAwayP3",
+                    "ScoreAwayOT",
+                    "ScoreAwaySO",
+                    "Star1",
+                    "Star2",
+                    "Star3",
+                    "ShotsHome",
+                    "ShotsAway",
+                    "PIMHome",
+                    "PIMAway",
+                    "HitsHome",
+                    "HitsAway",
+                    "GVHome",
+                    "GVAway",
+                    "TKHome",
+                    "TKAway",
+                    "FOWHome",
+                    "FOWAway",
+                    "SOGHomeP1",
+                    "SOGHomeP2",
+                    "SOGHomeP3",
+                    "SOGHomeOT",
+                    "SOGAwayP1",
+                    "SOGAwayP2",
+                    "SOGAwayP3",
+                    "SOGAwayOT",
+                    "PPGHome",
+                    "PPOHome",
+                    "PPGAway",
+                    "PPOAway",
+                    "Types",
+                    "SQ0Home",
+                    "SQ1Home",              
+                    "SQ2Home",
+                    "SQ3Home",
+                    "SQ4Home",
+                    "SQ0Away",
+                    "SQ1Away",
+                    "SQ2Away",
+                    "SQ3Away",
+                    "SQ4Away"
+                ],
+                "usecols": [
+                    "GameId",
+                    "Arena",
+                    "Attendance",
+                    "ScoreHomeP1",
+                    "ScoreHomeP2",
+                    "ScoreHomeP3",
+                    "ScoreHomeOT",
+                    "ScoreHomeSO",
+                    "ScoreAwayP1",
+                    "ScoreAwayP2",
+                    "ScoreAwayP3",
+                    "ScoreAwayOT",
+                    "ScoreAwaySO",
+                    "Star1",
+                    "Star2",
+                    "Star3",
+                    "ShotsHome",
+                    "ShotsAway",
+                    "PIMHome",
+                    "PIMAway",
+                    "HitsHome",
+                    "HitsAway",
+                    "GVHome",
+                    "GVAway",
+                    "TKHome",
+                    "TKAway",
+                    "FOWHome",
+                    "FOWAway",
+                    "SOGHomeP1",
+                    "SOGHomeP2",
+                    "SOGHomeP3",
+                    "SOGHomeOT",
+                    "SOGAwayP1",
+                    "SOGAwayP2",
+                    "SOGAwayP3",
+                    "SOGAwayOT",
+                    "PPGHome",
+                    "PPOHome",
+                    "PPGAway",
+                    "PPOAway",
+                    "SQ0Home",
+                    "SQ1Home",              
+                    "SQ2Home",
+                    "SQ3Home",
+                    "SQ4Home",
+                    "SQ0Away",
+                    "SQ1Away",
+                    "SQ2Away",
+                    "SQ3Away",
+                    "SQ4Away"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "50"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "GameId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Arena",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Attendance",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreHomeP1",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreHomeP2",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreHomeP3",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreHomeOT",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "ScoreHomeSO",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreAwayP1",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreAwayP2",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreAwayP3",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreAwayOT",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScoreAwaySO",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Star1",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Star2",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Star3",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ShotsHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ShotsAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PIMHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PIMAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "HitsHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "HitsAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GVHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GVAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TKHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TKAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FOWHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FOWAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOGHomeP1",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOGHomeP2",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOGHomeP3",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOGHomeOT",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOGAwayP1",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOGAwayP2",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOGAwayP3",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOGAwayOT",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPGHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPOHome",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPGAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPOAway",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ0Home",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ1Home",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ2Home",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ3Home",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ4Home",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ0Away",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ1Away",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ2Away",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ3Away",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ4Away",
+                            "colValue": "Int32"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 1,
+                "Merges": {
+                "on": "GameId",
+                "how": "left",
+                "mergeIndexes": [3, 1],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            },
+            "PostMergesOperations": [
+                {
+                    "commandName": "order",
+                    "commValue": ["LeagueId", "Dates", "GameId", "HomeId", "ScoreHome", "AwayId", "ScoreAway", "Types", "Played", "OT", "SO", "Arena", "Attendance", "ScoreHomeP1", "ScoreHomeP2", "ScoreHomeP3", "ScoreHomeOT", "ScoreHomeSO", "ScoreAwayP1", "ScoreAwayP2", "ScoreAwayP3", "ScoreAwayOT", "ScoreAwaySO", "Star1", "Star2", "Star3", "ShotsHome", "ShotsAway", "PIMHome", "PIMAway", "HitsHome", "HitsAway", "GVHome", "GVAway", "TKHome", "TKAway", "FOWHome", "FOWAway", "SOGHomeP1", "SOGHomeP2", "SOGHomeP3", "SOGHomeOT", "SOGAwayP1", "SOGAwayP2", "SOGAwayP3", "SOGAwayOT", "PPGHome", "PPGAway", "PPOHome", "PPOAway", "SQ0Home", "SQ1Home", "SQ2Home", "SQ3Home", "SQ4Home", "SQ0Away", "SQ1Away", "SQ2Away", "SQ3Away", "SQ4Away"]
+                }
+            ],
+            "Output": "games_result"
+        },
+        {
+            "Name": "dfBoxScoringSummary",
+            "Extract": {
+                "fileName": "boxscore_period_scoring_summary.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "GameId",
+                    "ScorePeriod",
+                    "ScoreTime",
+                    "ScorerId",
+                    "Assist1Id",
+                    "Assist2Id",
+                    "TeamId",
+                    "Note",
+                    "SQ"
+                ],
+                "usecols": [
+                    "GameId",
+                    "ScorePeriod",
+                    "ScoreTime",
+                    "ScorerId",
+                    "Assist1Id",
+                    "Assist2Id",
+                    "TeamId",
+                    "Note",
+                    "SQ"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "9"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "GameId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScorePeriod",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "ScoreTime",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "ScorerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Assist1Id",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Assist2Id",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Note",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "SQ",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["GameId", "ScorePeriod", "ScoreTime", "ScorerId", "Assist1Id", "Assist2Id", "TeamId", "Note", "SQ"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "games_scores"
+        },
+        {
+            "Name": "dfBoxPenaltiesSummary",
+            "Extract": {
+                "fileName": "boxscore_period_penalties_summary.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "GameId",
+                    "PenaltyPeriod",
+                    "PenaltyTime",
+                    "PlayerId",
+                    "TeamId",
+                    "Penalty",
+                    "Minutes"
+                ],
+                "usecols": [
+                    "GameId",
+                    "PenaltyPeriod",
+                    "PenaltyTime",
+                    "PlayerId",
+                    "TeamId",
+                    "Penalty",
+                    "Minutes"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "7"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "GameId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PenaltyPeriod",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "PenaltyTime",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Penalty",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Minutes",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["GameId", "PenaltyPeriod", "PenaltyTime", "PlayerId", "TeamId", "Penalty", "Minutes"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "games_penalties"
+        },
+        {
+            "Name": "dfBoxGoalieSummary",
+            "Extract": {
+                "fileName": "boxscore_goalie_summary.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "GameId",
+                    "PlayerId",
+                    "TeamId",
+                    "GR",
+                    "SA",
+                    "GA",
+                    "SV",
+                    "SVPer",
+                    "TOI",
+                    "PIM"
+                ],
+                "usecols": [
+                    "GameId",
+                    "PlayerId",
+                    "TeamId",
+                    "GR",
+                    "SA",
+                    "GA",
+                    "SV",
+                    "SVPer",
+                    "TOI",
+                    "PIM"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "10"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "replace",
+                    "commValue": [
+                        {
+                            "colName": "SVPer",
+                            "replace": ".00nan",
+                            "replacewith": "0"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "GameId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GR",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GA",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SV",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SVPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "TOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PIM",
+                            "colValue": "Int32"
+                        }
+                        
+                    ]
+                }
+            ],
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "GameId",
+                "how": "left",
+                "mergeIndexes": [1, 3],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            },
+            "PostMergesOperations": [
+                {
+                    "commandName": "isnotin",
+                    "commValue": [
+                        {
+                            "colName": "Played",
+                            "colValue": 0
+                        }
+                    ]
+                },
+                {
+                    "commandName": "drop",
+                    "commValue": [
+                        {
+                            "colName": "Played"
+                        },
+                        {
+                            "colName": "HomeId"
+                        },
+                        {
+                            "colName": "ScoreHome"
+                        },
+                        {
+                            "colName": "AwayId"
+                        },
+                        {
+                            "colName": "ScoreAway"
+                        },
+                        {
+                            "colName": "OT"
+                        },
+                        {
+                            "colName": "SO"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["LeagueId", "Dates", "Types", "GameId", "PlayerId", "TeamId", "GR", "SA", "GA", "SV", "SVPer", "TOI", "PIM"]
+                }
+            ],
+            "Output": "goalie_stats_game"
+        },
+        {
+            "Name": "dfBoxSkaterSummary",
+            "Extract": {
+                "fileName": "boxscore_skater_summary.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "GameId",
+                    "PlayerId",
+                    "TeamId",
+                    "GR",
+                    "GROff",
+                    "GRDef",
+                    "Goals",
+                    "Assists",
+                    "PlusMinus",
+                    "SOG",
+                    "MS",
+                    "BS",
+                    "PIM",
+                    "Hits",
+                    "TK",
+                    "GV",
+                    "Shifts",
+                    "TOI",
+                    "PPTOI",
+                    "SHTOI",
+                    "EVTOI",
+                    "FOW",
+                    "FOL",
+                    "FOPer",
+                    "TeamShotsOn",
+                    "TeamSAOn",
+                    "TeamShotsMissedOn",
+                    "TeamShotsMissedAgainstOn",
+                    "TeamSBOn",
+                    "TeamSBAgainstOn",
+                    "TeamGoalsOn",
+                    "TeamGAOn",
+                    "TeamShotsOff",
+                    "TeamSAOff",
+                    "TeamShotsMissedOff",
+                    "TeamShotsMissedAgainstOff",
+                    "TeamSBOff",
+                    "TeamSBAgainstOff",
+                    "TeamGoalsOff",
+                    "TeamGAOff",
+                    "OZStarts",
+                    "NZStarts",
+                    "DZStarts",
+                    "TeamOZStarts",
+                    "TeamNZStarts",
+                    "TeamDZStarts",
+                    "SQ0",
+                    "SQ1",
+                    "SQ2",
+                    "SQ3",
+                    "SQ4"
+                ],
+                "usecols": [
+                    "GameId",
+                    "PlayerId",
+                    "TeamId",
+                    "GR",
+                    "GROff",
+                    "GRDef",
+                    "Goals",
+                    "Assists",
+                    "PlusMinus",
+                    "SOG",
+                    "MS",
+                    "BS",
+                    "PIM",
+                    "Hits",
+                    "TK",
+                    "GV",
+                    "Shifts",
+                    "TOI",
+                    "PPTOI",
+                    "SHTOI",
+                    "EVTOI",
+                    "FOW",
+                    "FOL",
+                    "FOPer",
+                    "TeamShotsOn",
+                    "TeamSAOn",
+                    "TeamShotsMissedOn",
+                    "TeamShotsMissedAgainstOn",
+                    "TeamSBOn",
+                    "TeamSBAgainstOn",
+                    "TeamGoalsOn",
+                    "TeamGAOn",
+                    "TeamShotsOff",
+                    "TeamSAOff",
+                    "TeamShotsMissedOff",
+                    "TeamShotsMissedAgainstOff",
+                    "TeamSBOff",
+                    "TeamSBAgainstOff",
+                    "TeamGoalsOff",
+                    "TeamGAOff",
+                    "OZStarts",
+                    "NZStarts",
+                    "DZStarts",
+                    "TeamOZStarts",
+                    "TeamNZStarts",
+                    "TeamDZStarts",
+                    "SQ0",
+                    "SQ1",
+                    "SQ2",
+                    "SQ3",
+                    "SQ4"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": "51"
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "GameId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GR",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GROff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GRDef",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Goals",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Assists",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PlusMinus",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SOG",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "MS",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "BS",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PIM",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Hits",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TK",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "GV",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Shifts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PPTOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SHTOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "EVTOI",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FOW",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FOL",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "FOPer",
+                            "colValue": "Float64"
+                        },
+                        {
+                            "colName": "TeamShotsOn",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamSAOn",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamShotsMissedOn",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamShotsMissedAgainstOn",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamSBOn",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamSBAgainstOn",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamGoalsOn",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamGAOn",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamShotsOff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamSAOff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamShotsMissedOff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamShotsMissedAgainstOff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamSBOff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamSBAgainstOff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamGoalsOff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamGAOff",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "OZStarts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "NZStarts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "DZStarts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamOZStarts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamNZStarts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamDZStarts",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ0",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ1",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ2",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ3",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SQ4",
+                            "colValue": "Int32"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "GameId",
+                "how": "left",
+                "mergeIndexes": [1, 3],
+                "PostStoreIndex": 0,
+                "popIndex": [1, 3]
+            },
+            "PostMergesOperations": [
+                {
+                    "commandName": "isnotin",
+                    "commValue": [
+                        {
+                            "colName": "Played",
+                            "colValue": 0
+                        }
+                    ]
+                },
+                {
+                    "commandName": "drop",
+                    "commValue": [
+                        {
+                            "colName": "Played"
+                        },
+                        {
+                            "colName": "HomeId"
+                        },
+                        {
+                            "colName": "ScoreHome"
+                        },
+                        {
+                            "colName": "AwayId"
+                        },
+                        {
+                            "colName": "ScoreAway"
+                        },
+                        {
+                            "colName": "OT"
+                        },
+                        {
+                            "colName": "SO"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["LeagueId", "Dates", "Types", "GameId", "PlayerId", "TeamId", "GR", "GROff", "GRDef", "Goals", "Assists", "PlusMinus", "SOG", "MS", "BS", "PIM", "Hits", "GV", "TK", "Shifts", "TOI", "PPTOI", "SHTOI", "EVTOI", "FOW", "FOL", "FOPer", "TeamShotsOn", "TeamShotsOff", "TeamShotsMissedOn", "TeamShotsMissedOff", "TeamSBOn", "TeamSBOff", "TeamGoalsOn", "TeamGoalsOff", "TeamSAOn", "TeamSAOff", "TeamSBAgainstOn", "TeamSBAgainstOff", "TeamGAOn", "TeamGAOff", "TeamShotsMissedAgainstOn", "TeamShotsMissedAgainstOff", "OZStarts", "NZStarts", "DZStarts", "TeamOZStarts", "TeamNZStarts", "TeamDZStarts", "SQ0", "SQ1", "SQ2", "SQ3", "SQ4"]
+                }
+            ],
+            "Output": "skater_stats_game"
+        },
+        {
+            "Name": "dfStaffMaster",
+            "Extract": {
+                "fileName": "staff_master.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "StaffId",
+                    "TeamId",
+                    "FirstName",
+                    "LastName",
+                    "NickName",
+                    "DOB",
+                    "Birthcity",
+                    "Birthstate",
+                    "NationalityOne",
+                    "NationalityTwo",
+                    "NationalityThree",
+                    "Retired"
+                ],
+                "usecols": [
+                    "StaffId",
+                    "TeamId",
+                    "FirstName",
+                    "LastName",
+                    "NickName",
+                    "DOB",
+                    "Birthcity",
+                    "Birthstate",
+                    "NationalityOne",
+                    "NationalityTwo",
+                    "NationalityThree",
+                    "Retired"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "fillna",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "StaffId",
+                            "colValue": "-1"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "Retired",
+                            "colValue": "0"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "isnotin",
+                    "commValue": [
+                        {
+                            "colName": "StaffId",
+                            "colValue": "-1"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "dropduplicates",
+                    "colName": "StaffId"
+                },
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "StaffId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Season",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "FirstName",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "LastName",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NickName",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "DOB",
+                            "colValue": "datetime64[ns]"
+                        },
+                        {
+                            "colName": "Birthcity",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Birthstate",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NationalityOne",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NationalityTwo",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "NationalityThree",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Retired",
+                            "colValue": "Int32"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 0
+        },
+        {
+            "Name": "dfStaffRatings",
+            "Extract": {
+                "fileName": "staff_ratings.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "StaffId",
+                    "Executive",
+                    "Manager",
+                    "Coach",
+                    "Scout",
+                    "Trainer",
+                    "OffPref",
+                    "PhyPref",
+                    "LineMatching",
+                    "GoalieHandling",
+                    "FavourVeterans",
+                    "Innovation",
+                    "Loyalty",
+                    "CoachingGoalie",
+                    "CoachingDefense",
+                    "CoachingForward",
+                    "CoachingProspects",
+                    "DefSkills",
+                    "OffSkills",
+                    "PhyTraining",
+                    "PlayerManagement",
+                    "Motivation",
+                    "Discipline",
+                    "Negotiating",
+                    "SelfPreservation",
+                    "Tactics",
+                    "IngameTactics",
+                    "TrainerSkill",
+                    "Blank",
+                    "EvaluateAbilities",
+                    "EvaluatePotential"
+                ],
+                "usecols": [
+                    "StaffId",
+                    "Executive",
+                    "Manager",
+                    "Coach",
+                    "Scout",
+                    "Trainer",
+                    "OffPref",
+                    "PhyPref",
+                    "LineMatching",
+                    "GoalieHandling",
+                    "FavourVeterans",
+                    "Innovation",
+                    "Loyalty",
+                    "CoachingGoalie",
+                    "CoachingDefense",
+                    "CoachingForward",
+                    "CoachingProspects",
+                    "DefSkills",
+                    "OffSkills",
+                    "PhyTraining",
+                    "PlayerManagement",
+                    "Motivation",
+                    "Discipline",
+                    "Negotiating",
+                    "SelfPreservation",
+                    "Tactics",
+                    "IngameTactics",
+                    "TrainerSkill",
+                    "EvaluateAbilities",
+                    "EvaluatePotential"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "fillna",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "StaffId",
+                            "colValue": "-1"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "isnotin",
+                    "commValue": [
+                        {
+                            "colName": "StaffId",
+                            "colValue": "-1"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "dropduplicates",
+                    "colName": "StaffId"
+                },
+                {
+                "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "StaffId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Executive",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Manager",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Coach",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Scout",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Trainer",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "OffPref",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "PhyPref",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "LineMatching",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "GoalieHandling",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "FavourVeterans",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Innovation",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "Loyalty",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "CoachingGoalie",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CoachingDefense",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CoachingForward",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "CoachingProspects",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "DefSkills",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "OffSkills",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PhyTraining",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "PlayerManagement",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Motivation",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Discipline",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Negotiating",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "SelfPreservation",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Tactics",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "IngameTactics",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TrainerSkill",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "EvaluateAbilities",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "EvaluatePotential",
+                            "colValue": "Int32"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "StaffId",
+                "how": "left",
+                "mergeIndexes": [0, 1],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            },
+            "PostMergesOperations": [
+                {
+                    "commandName": "replace",
+                    "commValue": [
+                        {
+                            "colName": "All",
+                            "replace": -1,
+                            "replacewith": "None"
+                        },
+                        {
+                            "colName": "All",
+                            "replace": "None",
+                            "replacewith": "None"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["StaffId", "TeamId", "Season", "FirstName", "LastName", "NickName", "DOB", "Birthcity", "Birthstate", "NationalityOne", "NationalityTwo", "NationalityThree", "Retired", "Executive", "Manager", "Coach", "Scout", "Trainer", "OffPref", "PhyPref", "LineMatching", "GoalieHandling", "FavourVeterans", "Innovation", "Loyalty", "CoachingGoalie", "CoachingDefense", "CoachingForward", "CoachingProspects", "DefSkills", "OffSkills", "PhyTraining", "PlayerManagement", "Motivation", "Discipline", "Negotiating", "SelfPreservation", "Tactics", "IngameTactics", "TrainerSkill", "EvaluateAbilities", "EvaluatePotential"]
+                }
+            ],
+            "Output": "staffs"
+        },
+        {
+            "Name": "dfDraftResult",
+            "Extract": {
+                "fileName": "draft_info.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "DraftId",
+                    "Year",
+                    "Round",
+                    "Pick",
+                    "Overall",
+                    "TeamId",
+                    "TeamIdPickedFrom"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "DraftId",
+                    "Year",
+                    "Round",
+                    "Pick",
+                    "Overall",
+                    "TeamId",
+                    "TeamIdPickedFrom"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": 8
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "DraftId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Year",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Round",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Pick",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Overall",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamIdPickedFrom",
+                            "colValue": "Int32"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 0
+        },
+        {
+            "Name": "dfDraftInfo",
+            "Extract": {
+                "fileName": "draft_index.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "DraftId",
+                    "DraftName"
+                ],
+                "usecols": [
+                    "DraftId",
+                    "DraftName"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": 2
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "DraftId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "DraftName",
+                            "colValue": "string"
+                        }
+                    ]
+                }
+            ],
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "DraftId",
+                "how": "left",
+                "mergeIndexes": [0, 1],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            },
+            "PostMergesOperations": [
+                {
+                    "commandName": "draftyear",
+                    "commValue": "True"
+                },
+                {
+                    "commandName": "replace",
+                    "commValue": [
+                        {
+                            "colName": "All",
+                            "replace": -1,
+                            "replacewith": "None"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "dropduplicates",
+                    "colName": ["PlayerId", "DraftId", "Season"]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "DraftId", "Season", "Round", "Pick", "Overall", "TeamId", "TeamIdPickedFrom", "DraftName"]
+                }
+            ],
+            "Output": "drafts"
+        },
+        {
+            "Name": "dfPlayerRights",
+            "Extract": {
+                "fileName": "player_rights.csv",
+                "blocksize": "100e6",
+                "names": [
+                    "PlayerId",
+                    "LeagueId",
+                    "TeamId"
+                ],
+                "usecols": [
+                    "PlayerId",
+                    "LeagueId",
+                    "TeamId"
+                ],
+                "dtype": "string"
+            },
+            "Operations": [
+                {
+                    "commandName": "count",
+                    "axis": "columns",
+                    "numCols": 3
+                },
+                {
+                    "commandName": "isin",
+                    "commValue": [
+                        {
+                            "colName": "TeamId",
+                            "colValue": "teams"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "assign",
+                    "colName": "Season",
+                    "colValue": "season"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "Season",
+                            "colValue": "string"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "Int32"
+                        },
+                        {
+                            "colName": "TeamId",
+                            "colValue": "Int32"
+                        }
+                    ]
+                },
+                {
+                    "commandName": "order",
+                    "commValue": ["PlayerId", "Season", "LeagueId", "TeamId"]
+                }
+            ],
+            "PreStoreIndex": 0,
+            "Output": "player_rights"
+        }
+    ]
+}

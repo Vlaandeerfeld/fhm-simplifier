@@ -1,8 +1,10 @@
-Upcoming changes:
+fhm-simplifier v1.0.0
 
-Remove hardcoded league list and move to configuration file.
+Official full versions release.
 
-More support for different games/versions exports.
+Implemented moving most hardcoded options such as league list, output, input files and moved them to game specific versions.
+
+Added argparse to module imports for specificing which game the files are from.
 
 fhm-simplifier v0.3.1
 

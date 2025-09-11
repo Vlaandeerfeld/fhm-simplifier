@@ -1,5 +1,9 @@
 {
-    "Version": "FHM11-v11.4.52",
+    "Version": "FHM10-v10.5.59",
+    "Leagues": ["0", "1", "2", "3", "4", "10", "11", "12", "13", "14"],
+    "numFiles": 21,
+    "filepath": "csv/import_export/",
+    "outfilepath": "simplifiedFiles",
     "Files": [
         {
             "Name": "dfLeagues",
@@ -217,8 +221,7 @@
                     "NationalityTwo",
                     "NationalityThree",
                     "Retired",
-                    "Hand",
-                    "Rookie"
+                    "Hand"
                 ],
                 "usecols": [
                     "PlayerId",
@@ -235,8 +238,7 @@
                     "NationalityTwo",
                     "NationalityThree",
                     "Retired",
-                    "Hand",
-                    "Rookie"
+                    "Hand"
                 ],
                 "dtype": "string"
             },
@@ -331,10 +333,6 @@
                         {
                             "colName": "Hand",
                             "colValue": "string"
-                        },
-                        {
-                            "colName": "Rookie",
-                            "colValue": "Int32"
                         }
                     ]
                 }
@@ -736,7 +734,7 @@
             "PostMergesOperations": [
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "TeamId", "Season", "FirstName", "LastName", "NickName", "Height", "Weight", "DOB", "Birthcity", "Birthstate", "NationalityOne", "NationalityTwo", "NationalityThree", "Retired", "Hand", "Rookie", "Goalie", "LeftD", "RightD", "LeftW", "Center", "RightW", "Screening", "GettingOpen", "Passing", "PuckHandling", "ShootingAccuracy", "ShootingRange", "OffensiveRead", "Checking", "Faceoffs", "Hitting", "Positioning", "ShotBlocking", "StickChecking", "DefensiveRead", "Acceleration", "Agility", "Balance", "Speed", "Stamina", "Strength", "Fighting", "GoaliePositioning", "GoaliePassing", "GoaliePokeChecking", "GoalieBlocker", "GoalieGlove", "GoalieRebound", "GoalieRecovery", "GoaliePuckHandling", "GoalieLowShots", "GoalieSkating", "GoalieReflexes", "GoalieMentalToughness", "GoalieStamina", "Aggression", "Bravery", "Determination", "Teamplayer", "Leadership", "Temperament", "Professionalism", "Skating", "Shooting", "Playmaking", "Defending", "Physicality", "Conditioning", "Characters", "HockeySense", "GoalieTechnique", "GoalieOverallPositioning", "Ability", "Potential"]
+                    "commValue": ["PlayerId", "TeamId", "Season", "FirstName", "LastName", "NickName", "Height", "Weight", "DOB", "Birthcity", "Birthstate", "NationalityOne", "NationalityTwo", "NationalityThree", "Retired", "Hand", "Goalie", "LeftD", "RightD", "LeftW", "Center", "RightW", "Screening", "GettingOpen", "Passing", "PuckHandling", "ShootingAccuracy", "ShootingRange", "OffensiveRead", "Checking", "Faceoffs", "Hitting", "Positioning", "ShotBlocking", "StickChecking", "DefensiveRead", "Acceleration", "Agility", "Balance", "Speed", "Stamina", "Strength", "Fighting", "GoaliePositioning", "GoaliePassing", "GoaliePokeChecking", "GoalieBlocker", "GoalieGlove", "GoalieRebound", "GoalieRecovery", "GoaliePuckHandling", "GoalieLowShots", "GoalieSkating", "GoalieReflexes", "GoalieMentalToughness", "GoalieStamina", "Aggression", "Bravery", "Determination", "Teamplayer", "Leadership", "Temperament", "Professionalism", "Skating", "Shooting", "Playmaking", "Defending", "Physicality", "Conditioning", "Characters", "HockeySense", "GoalieTechnique", "GoalieOverallPositioning", "Ability", "Potential"]
                 }
             ],
             "Output": "players"
@@ -1621,7 +1619,6 @@
                     "TeamId",
                     "FranchiseId",
                     "GP",
-                    "Starts",
                     "TOI",
                     "Wins",
                     "Losses",
@@ -1638,7 +1635,6 @@
                     "PlayerId",
                     "TeamId",
                     "GP",
-                    "Starts",
                     "TOI",
                     "Wins",
                     "Losses",
@@ -1657,7 +1653,7 @@
                 {
                     "commandName": "count",
                     "axis": "columns",
-                    "numCols": "15"
+                    "numCols": "14"
                 },
                 {
                     "commandName": "isin",
@@ -1701,10 +1697,6 @@
                         },
                         {
                             "colName": "GP",
-                            "colValue": "Int32"
-                        },
-                        {
-                            "colName": "Starts",
                             "colValue": "Int32"
                         },
                         {
@@ -1759,7 +1751,7 @@
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
                 }
             ],
             "PreStoreIndex": 0,
@@ -1775,7 +1767,6 @@
                     "TeamId",
                     "FranchiseId",
                     "GP",
-                    "Starts",
                     "TOI",
                     "Wins",
                     "Losses",
@@ -1792,7 +1783,6 @@
                     "PlayerId",
                     "TeamId",
                     "GP",
-                    "Starts",
                     "TOI",
                     "Wins",
                     "Losses",
@@ -1811,7 +1801,7 @@
                 {
                     "commandName": "count",
                     "axis": "columns",
-                    "numCols": "15"
+                    "numCols": "14"
                 },
                 {
                     "commandName": "isin",
@@ -1855,10 +1845,6 @@
                         },
                         {
                             "colName": "GP",
-                            "colValue": "Int32"
-                        },
-                        {
-                            "colName": "Starts",
                             "colValue": "Int32"
                         },
                         {
@@ -1909,7 +1895,7 @@
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
                 }
             ],
             "PreStoreIndex": 0,
@@ -1925,7 +1911,6 @@
                     "TeamId",
                     "FranchiseId",
                     "GP",
-                    "Starts",
                     "TOI",
                     "Wins",
                     "Losses",
@@ -1942,7 +1927,6 @@
                     "PlayerId",
                     "TeamId",
                     "GP",
-                    "Starts",
                     "TOI",
                     "Wins",
                     "Losses",
@@ -1961,7 +1945,7 @@
                 {
                     "commandName": "count",
                     "axis": "columns",
-                    "numCols": "15"
+                    "numCols": "14"
                 },
                 {
                     "commandName": "isin",
@@ -2005,10 +1989,6 @@
                         },
                         {
                             "colName": "GP",
-                            "colValue": "Int32"
-                        },
-                        {
-                            "colName": "Starts",
                             "colValue": "Int32"
                         },
                         {
@@ -2059,7 +2039,7 @@
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "Starts", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
+                    "commValue": ["PlayerId", "TeamId", "Season", "GP", "TOI", "Wins", "Losses", "OT", "SA", "Saves", "GA", "GAA", "SVPer", "Shutouts", "GR"]
                 }
             ],
             "PreStoreIndex": 0,

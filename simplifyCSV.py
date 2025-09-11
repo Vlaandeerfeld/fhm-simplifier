@@ -7,6 +7,7 @@ import dask.dataframe as dd
 import json
 from datetime import datetime
 from io import StringIO
+import argparse
 
 # Print iterations progress credit to Greenstick from https://stackoverflow.com/questions/3173320/text-progress-bar-in-terminal-with-block-characters because I could not figure it out.
 def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 21, fill = '█', printEnd = "\r\n"):
@@ -31,17 +32,14 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
 		print()
 
 # Importing CSV files in blocks to avoid overloading memory lower blocksize if needed. All data imported as string and then converted before being exported.
-def importFiles():
+def importFiles(filepath):
 
- 	#change filepath variable to filepath to save game import/export file
- 	filepath = 'csv/import_export/'
-
- 	dfSchedules = dd.read_csv(filepath + 'schedules.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=['LeagueId', 'Dates', 'HomeId', 'Score_Home', 'AwayId', 'Score_Away', 'Types', 'Played', 'OT', 'SO', 'GameId'], dtype='string')	
- 	dfTeamData = dd.read_csv(filepath + 'team_data.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=['TeamId', 'LeagueId', 'Team_Name', 'Team_Nickname', 'Team_Abbr', 'Parent_Team1', 'Parent_Team2', 'Parent_Team3', 'Parent_Team4', 'Parent_Team5', 'Parent_Team6', 'Parent_Team7', 'Parent_Team8', 'Primary_Colour', 'Secondary_Colour', 'Text_Colour', 'ConferenceId', 'DivisionId'], dtype='string')
+ 	dfSchedules = dd.read_csv(f'{filepath}schedules.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=['LeagueId', 'Dates', 'HomeId', 'Score_Home', 'AwayId', 'Score_Away', 'Types', 'Played', 'OT', 'SO', 'GameId'], usecols=['Dates', 'Played'], dtype='string')	
+ 	dfTeamData = dd.read_csv(f'{filepath}team_data.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=['TeamId', 'LeagueId', 'Team_Name', 'Team_Nickname', 'Team_Abbr', 'Parent_Team1', 'Parent_Team2', 'Parent_Team3', 'Parent_Team4', 'Parent_Team5', 'Parent_Team6', 'Parent_Team7', 'Parent_Team8', 'Primary_Colour', 'Secondary_Colour', 'Text_Colour', 'ConferenceId', 'DivisionId'], usecols=['TeamId', 'LeagueId'], dtype='string')
  
  	return([dfTeamData, dfSchedules])
 
-def getLeagues(dfTeamData, dfSchedules):
+def getLeagues(dfTeamData, dfSchedules, leagues):
 	#Get season start year and end year
 	seasonStart =  dfSchedules['Dates'].head(n=1, compute=True)
 	seasonStart = seasonStart.values[0][0:4]
@@ -62,10 +60,7 @@ def getLeagues(dfTeamData, dfSchedules):
 
 	#export date into datetime format.
 	exportDate = datetime.strptime(exportDate, '%Y-%m-%d')
-
-	#Define leagues that will be included in output files. LeagueIds found in league_data.csv
-	leagues = ['0', '1', '2', '3', '4', '10', '11', '12', '13', '14']
-
+	
 	#Using leagues find TeamIds in those leagues.
 	teams = dfTeamData[['LeagueId', 'TeamId']].compute()
 	teams = teams[teams['LeagueId'].isin(leagues)]['TeamId']
@@ -73,11 +68,8 @@ def getLeagues(dfTeamData, dfSchedules):
 
 	return(season, teams, leagues, exportDate)
 
-def simplifyFiles(season, teams, leagues, exportDate):
+def simplifyFiles(season, teams, leagues, exportDate, outfilepath, numFiles, filesData, filepath):
 	
-	#Change outfilepath to desired folder. Currently default is simplifiedCSV in root folder.
-	outfilepath = 'simplifiedFiles'
-
 	seasonvalue = season[0:4] + '-' + season[5:9]
 
 	def sanitizeData():
@@ -104,7 +96,7 @@ def simplifyFiles(season, teams, leagues, exportDate):
 	#Check draft_info.csv for correct number of non-null per row. Check draft_index.csv for correct number of non-null per row. Set data type for both, merge into one dataframe. Add +1 to dfDraft Year and turn into Season and add back to dataframe. Order columns and then export to draft file. 
 	#Check player_rights.csv for correct number of non-null per row, check if TeamId have specified TeamId from specified LeagueId. Set data types and order columns before exporting to player_rights file.
 
-		def operationsList(dfData, operation, leagues, teams):
+		def operationsList(dfData, operation, leagues, teams, filepath):
 			#Count operation checks number of non-null value and drops them if they do not equal a specified number.
 			if operation['commandName'] == 'count':
 				dfData = dfData[dfData.count(axis=operation['axis']) == int(operation['numCols'])]
@@ -188,22 +180,17 @@ def simplifyFiles(season, teams, leagues, exportDate):
 
 		fileCount = 0
 
-		#import simplifying configuration file to put through the extract, sanitize, merge and export functions.
-		with open('configure.json', 'r') as file:
-			data = json.load(file)
-
-		filesData = data['Files']
 		dfDataFrms = [0, 1, 2, 3]
 
 		#Loop through defined files in json configuration file. Files found in export folder of saved games.
 		for fileData in filesData:
 			#Check if there is an Extract structure
 			if 'Extract' in fileData:
-				dfData = dd.read_csv(f'csv/import_export/{fileData['Extract']['fileName']}', blocksize=fileData['Extract']['blocksize'], sep=';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=fileData['Extract']['names'], usecols=fileData['Extract']['usecols'], dtype=fileData['Extract']['dtype'])
+				dfData = dd.read_csv(f'{filepath}{fileData['Extract']['fileName']}', blocksize=fileData['Extract']['blocksize'], sep=';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=fileData['Extract']['names'], usecols=fileData['Extract']['usecols'], dtype=fileData['Extract']['dtype'])
 			#Check if there are operations to perform
 			if "Operations" in fileData:
 				for operation in fileData['Operations']:
-					dfData = operationsList(dfData, operation, leagues, teams)
+					dfData = operationsList(dfData, operation, leagues, teams, filepath)
 
 			#Store manipulated dataframes in specified Index for later output or retrieval.
 			dfDataFrms[fileData['PreStoreIndex']] = dfData
@@ -216,7 +203,7 @@ def simplifyFiles(season, teams, leagues, exportDate):
 			#Check if there are operations to do post merge. Same kind of operations that can be performed before a merge.
 			if 'PostMergesOperations' in fileData:
 				for PostMergesOperations in fileData['PostMergesOperations']:
-					dfDataFrms[0] = operationsList(dfDataFrms[0], PostMergesOperations, leagues, teams)
+					dfDataFrms[0] = operationsList(dfDataFrms[0], PostMergesOperations, leagues, teams, filepath)
 			#Check if dataframe will be outputed to CSV. Not every file will be exported may loop through and merge with another file.
 			if "Output" in fileData:
 				dfDataFrms[0].to_csv(f'{outfilepath}/csv/{fileData['Output']}.csv', index=False, date_format='%Y/%m/%d', single_file=True)
@@ -224,14 +211,28 @@ def simplifyFiles(season, teams, leagues, exportDate):
 				#overwrite first element which should always be final store location before exporting to csv or parquet.
 				dfDataFrms[0] = 0
 				fileCount += 1
-				printProgressBar(fileCount, 21, prefix = fileData['Output'])
+				printProgressBar(fileCount, numFiles, prefix = fileData['Output'])
 
 	sanitizeData()
 
 def main():
-	files = importFiles()
-	season, teams, leagues, exportDate = getLeagues(files[0], files[1])
-	simplifyFiles(season, teams, leagues, exportDate)
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-version", help="Specify FHM version e.g. FHM09 or FHM11", type=str)
+	args = parser.parse_args()
+	#Default to FHM11 if no version specified.
+	if args.version:
+		version = args.version
+	else:
+		version = 'FHM11'
+
+	with open(f'configure{version}.json', 'r') as file:
+		data = json.load(file)
+
+	gameVersion, leagues, numFiles, filepath, outfilepath, datafiles = data['Version'], data['Leagues'], data['numFiles'], data['filepath'], data['outfilepath'], data['Files']
+
+	files = importFiles(filepath)
+	season, teams, leagues, exportDate = getLeagues(files[0], files[1], leagues)
+	simplifyFiles(season, teams, leagues, exportDate, outfilepath, numFiles, datafiles, filepath)
 
 if __name__ == '__main__':
 	main()
