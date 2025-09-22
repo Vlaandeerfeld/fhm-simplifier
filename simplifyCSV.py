@@ -31,11 +31,11 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
 	if iteration == total: 
 		print()
 
-# Importing CSV files in blocks to avoid overloading memory lower blocksize if needed. All data imported as string and then converted before being exported.
+# Importing CSV files in blocks to avoid overloading memory lower blocksize if needed. All data imported as string and then converted before being exported. Encoding set to mbcs as it works on windows and can display special characters like s with caron above used in some czech names like pospisil. If using linux change encoding to latin1 and the s with caron will change to an o with an umlaut.
 def importFiles(filepath):
 
- 	dfSchedules = dd.read_csv(f'{filepath}schedules.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=['LeagueId', 'Dates', 'HomeId', 'Score_Home', 'AwayId', 'Score_Away', 'Types', 'Played', 'OT', 'SO', 'GameId'], usecols=['Dates', 'Played'], dtype='string')	
- 	dfTeamData = dd.read_csv(f'{filepath}team_data.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=['TeamId', 'LeagueId', 'Team_Name', 'Team_Nickname', 'Team_Abbr', 'Parent_Team1', 'Parent_Team2', 'Parent_Team3', 'Parent_Team4', 'Parent_Team5', 'Parent_Team6', 'Parent_Team7', 'Parent_Team8', 'Primary_Colour', 'Secondary_Colour', 'Text_Colour', 'ConferenceId', 'DivisionId'], usecols=['TeamId', 'LeagueId'], dtype='string')
+ 	dfSchedules = dd.read_csv(f'{filepath}schedules.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='mbcs', header=0, names=['LeagueId', 'Dates', 'HomeId', 'Score_Home', 'AwayId', 'Score_Away', 'Types', 'Played', 'OT', 'SO', 'GameId'], usecols=['Dates', 'Played'], dtype='string')	
+ 	dfTeamData = dd.read_csv(f'{filepath}team_data.csv', blocksize=100e6, sep = ';', on_bad_lines='skip', encoding='mbcs', header=0, names=['TeamId', 'LeagueId', 'Team_Name', 'Team_Nickname', 'Team_Abbr', 'Parent_Team1', 'Parent_Team2', 'Parent_Team3', 'Parent_Team4', 'Parent_Team5', 'Parent_Team6', 'Parent_Team7', 'Parent_Team8', 'Primary_Colour', 'Secondary_Colour', 'Text_Colour', 'ConferenceId', 'DivisionId'], usecols=['TeamId', 'LeagueId'], dtype='string')
  
  	return([dfTeamData, dfSchedules])
 
@@ -109,6 +109,10 @@ def simplifyFiles(season, teams, leagues, exportDate, outfilepath, numFiles, fil
 						dfData = dfData[dfData['TeamId'].isin(teams)]
 					else:
 						dfData = dfData[dfData[isinComm['colName']].isin([isinComm['colValue']])]
+			#isna operation checks if value is null in specified column.
+			elif operation['commandName'] == 'isna':
+				for isnaComm in operation['commValue']:
+					dfData = dfData[~dfData[isnaComm['colName']].isna()]
 			#astype operation sets values in columns. If range == Per loops through list of columns. Else sets all columns to the same value.
 			elif operation['commandName'] == 'astype':
 				if operation['range'] == 'Per':
@@ -121,7 +125,6 @@ def simplifyFiles(season, teams, leagues, exportDate, outfilepath, numFiles, fil
 							dfData = dfData.astype({asTypeComm['colName']: asTypeComm['colValue']})
 				else:
 					dfData = dfData.astype(operation['commValue'][0]['colValue'])
-
 			#assign operation inserts new column. If Season assigns season value line 50, if Date assigns exportDate line 57.
 			elif operation['commandName'] == 'assign':
 				if operation['colName'] == 'Season':
@@ -186,7 +189,7 @@ def simplifyFiles(season, teams, leagues, exportDate, outfilepath, numFiles, fil
 		for fileData in filesData:
 			#Check if there is an Extract structure
 			if 'Extract' in fileData:
-				dfData = dd.read_csv(f'{filepath}{fileData['Extract']['fileName']}', blocksize=fileData['Extract']['blocksize'], sep=';', on_bad_lines='skip', encoding='ISO-8859-15', header=0, names=fileData['Extract']['names'], usecols=fileData['Extract']['usecols'], dtype=fileData['Extract']['dtype'])
+				dfData = dd.read_csv(f'{filepath}{fileData['Extract']['fileName']}', blocksize=fileData['Extract']['blocksize'], sep=';', on_bad_lines='skip', encoding='mbcs', header=0, names=fileData['Extract']['names'], usecols=fileData['Extract']['usecols'], dtype=fileData['Extract']['dtype'])
 			#Check if there are operations to perform
 			if "Operations" in fileData:
 				for operation in fileData['Operations']:

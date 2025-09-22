@@ -77,6 +77,10 @@
             },
             "Operations": [
                 {
+                    "commandName": "dropduplicates",
+                    "colName": "LeagueId"
+                },
+                {
                     "commandName": "count",
                     "axis": "columns",
                     "numCols": 3
@@ -153,17 +157,13 @@
                     ]
                 },
                 {
-                    "commandName": "drop",
-                    "commValue": [
-                        {
-                            "colName": "LeagueId"
-                        }
-                    ]
-                },
-                {
                     "commandName": "astype",
                     "range": "Per",
                     "commValue": [
+                        {
+                            "colName": "LeagueId",
+                            "colValue": "Int32"
+                        },
                         {
                             "colName": "ConferenceId",
                             "colValue": "Int32"
@@ -181,7 +181,7 @@
             ],
             "PreStoreIndex": 1,
             "Merges": {
-                "on": "ConferenceId",
+                "on": ["LeagueId", "ConferenceId"],
                 "how": "left",
                 "mergeIndexes": [0, 1],
                 "PostStoreIndex": 0,
@@ -192,6 +192,20 @@
                     "commandName": "assign",
                     "colName": "Season",
                     "colValue": "season"
+                },
+                {
+                    "commandName": "fillna",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "ConferenceId",
+                            "colValue": 0
+                        },
+                        {
+                            "colName": "DivisionId",
+                            "colValue": 0
+                        }
+                    ]
                 },
                 {
                     "commandName": "order",
@@ -260,6 +274,30 @@
                         {
                             "colName": "PlayerId",
                             "colValue": "-1"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "174566"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Oteyev"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "167711"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Ibragimov"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "180395"
+                        },
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "Hushvaqtov"
                         }
                     ]
                 },
@@ -2166,7 +2204,24 @@
                             "colValue": "teams"
                         }
                     ]
+                },
+                {
+                    "commandName": "isnotin",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "-1"
+                        }
+                    ]
                 }, 
+                {
+                    "commandName": "isna",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId"
+                        }
+                    ]
+                },
                 {
                     "commandName": "assign",
                     "colName": "Season",
@@ -2226,7 +2281,7 @@
                         },
                         {
                             "colName": "Major5thYear",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "Major6thYear",
@@ -2442,7 +2497,16 @@
                             "colValue": "teams"
                         }
                     ]
-                }, 
+                },
+                {
+                    "commandName": "isnotin",
+                    "commValue": [
+                        {
+                            "colName": "PlayerId",
+                            "colValue": "-1"
+                        }
+                    ]
+                },
                 {
                     "commandName": "assign",
                     "colName": "Season",
@@ -2506,7 +2570,7 @@
                         },
                         {
                             "colName": "Major7thYear",
-                            "colValue": "Float64"
+                            "colValue": "Int32"
                         },
                         {
                             "colName": "Major8thYear",

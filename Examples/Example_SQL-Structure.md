@@ -1,14 +1,17 @@
-CREATE DATABASE NHLv5;
-USE NHLv5;
+CREATE DATABASE test1;
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_0900_ai_ci;
+
+USE test1;
 
 CREATE TABLE leagues(
 	LeagueId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	ConferenceId SMALLINT UNSIGNED,
-	ConferenceName VARCHAR(30),
+	ConferenceName VARCHAR(50),
 	DivisionId SMALLINT UNSIGNED,
-	DivisionName VARCHAR(30),
-	LeagueName VARCHAR(30),
+	DivisionName VARCHAR(50),
+	LeagueName VARCHAR(50),
 	LeagueAbbr VARCHAR(10),
 	PRIMARY KEY (LeagueId, Season, ConferenceId, DivisionId)
 );
@@ -16,9 +19,9 @@ CREATE TABLE leagues(
 CREATE TABLE teams(
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
-	TeamName VARCHAR(30),
+	TeamName VARCHAR(50),
 	TeamNickname VARCHAR(30),
-	TeamAbbr VARCHAR(4),
+	TeamAbbr VARCHAR(7),
 	LeagueId SMALLINT UNSIGNED,
 	ConferenceId SMALLINT UNSIGNED,
 	DivisionId SMALLINT UNSIGNED,
@@ -203,7 +206,7 @@ CREATE TABLE player_rights(
 	Season VARCHAR(9),
 	LeagueId SMALLINT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
-	PRIMARY KEY (PlayerId, Season)
+	PRIMARY KEY (PlayerId, TeamId, Season)
 );
 
 CREATE TABLE skater_stats_game(
@@ -429,7 +432,7 @@ CREATE TABLE goalie_stats_rs(
 	SA SMALLINT UNSIGNED,
 	Saves SMALLINT UNSIGNED,
 	GA SMALLINT UNSIGNED,
-	GAA DOUBLE (3, 2), 
+	GAA DOUBLE (4, 2), 
 	SVPer DOUBLE (4, 3),
 	Shutouts SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
@@ -449,8 +452,8 @@ CREATE TABLE goalie_stats_po(
 	SA SMALLINT UNSIGNED,
 	Saves SMALLINT UNSIGNED,
 	GA SMALLINT UNSIGNED,
-	GAA DOUBLE (3, 2),
-	SVPer DOUBLE (3, 2),
+	GAA DOUBLE (4, 2),
+	SVPer DOUBLE (4, 3),
 	Shutouts SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
 	PRIMARY KEY (PlayerId, TeamId, Season)
@@ -469,7 +472,7 @@ CREATE TABLE goalie_stats_ps(
 	SA SMALLINT UNSIGNED,
 	Saves SMALLINT UNSIGNED,
 	GA SMALLINT UNSIGNED,
-	GAA DOUBLE (3, 2),
+	GAA DOUBLE (4, 2),
 	SVPer DOUBLE (4, 3),
 	Shutouts SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
@@ -677,7 +680,6 @@ CREATE TABLE team_stats(
 	PRIMARY KEY (TeamId, Season)
 );
 
-
 CREATE TABLE games_penalties(
 	GameId MEDIUMINT UNSIGNED,
 	PenaltyPeriod VARCHAR(3),
@@ -766,14 +768,15 @@ CREATE TABLE games_scores(
 	PRIMARY KEY (GameId, ScorePeriod, ScoreTime)
 );
 
+
 CREATE TABLE leagues_temp(
 	LeagueId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	ConferenceId SMALLINT UNSIGNED,
-	ConferenceName VARCHAR(30),
+	ConferenceName VARCHAR(50),
 	DivisionId SMALLINT UNSIGNED,
-	DivisionName VARCHAR(30),
-	LeagueName VARCHAR(30),
+	DivisionName VARCHAR(50),
+	LeagueName VARCHAR(50),
 	LeagueAbbr VARCHAR(10),
 	PRIMARY KEY (LeagueId, Season, ConferenceId, DivisionId)
 );
@@ -781,9 +784,9 @@ CREATE TABLE leagues_temp(
 CREATE TABLE teams_temp(
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
-	TeamName VARCHAR(30),
+	TeamName VARCHAR(50),
 	TeamNickname VARCHAR(30),
-	TeamAbbr VARCHAR(4),
+	TeamAbbr VARCHAR(7),
 	LeagueId SMALLINT UNSIGNED,
 	ConferenceId SMALLINT UNSIGNED,
 	DivisionId SMALLINT UNSIGNED,
@@ -968,7 +971,7 @@ CREATE TABLE player_rights_temp(
 	Season VARCHAR(9),
 	LeagueId SMALLINT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
-	PRIMARY KEY (PlayerId, Season)
+	PRIMARY KEY (PlayerId, TeamId, Season)
 );
 
 CREATE TABLE skater_stats_game_temp(
@@ -1194,7 +1197,7 @@ CREATE TABLE goalie_stats_rs_temp(
 	SA SMALLINT UNSIGNED,
 	Saves SMALLINT UNSIGNED,
 	GA SMALLINT UNSIGNED,
-	GAA DOUBLE (3, 2), 
+	GAA DOUBLE (4, 2), 
 	SVPer DOUBLE (4, 3),
 	Shutouts SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
@@ -1214,7 +1217,7 @@ CREATE TABLE goalie_stats_po_temp(
 	SA SMALLINT UNSIGNED,
 	Saves SMALLINT UNSIGNED,
 	GA SMALLINT UNSIGNED,
-	GAA DOUBLE (3, 2),
+	GAA DOUBLE (4, 2),
 	SVPer DOUBLE (4, 3),
 	Shutouts SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
@@ -1234,7 +1237,7 @@ CREATE TABLE goalie_stats_ps_temp(
 	SA SMALLINT UNSIGNED,
 	Saves SMALLINT UNSIGNED,
 	GA SMALLINT UNSIGNED,
-	GAA DOUBLE (3, 2),
+	GAA DOUBLE (4, 2),
 	SVPer DOUBLE (4, 3),
 	Shutouts SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
@@ -1530,3 +1533,4 @@ CREATE TABLE games_scores_temp(
 	SQ SMALLINT UNSIGNED,
 	PRIMARY KEY (GameId, ScorePeriod, ScoreTime)
 );
+
