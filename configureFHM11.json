@@ -77,10 +77,6 @@
             },
             "Operations": [
                 {
-                    "commandName": "dropduplicates",
-                    "colName": "LeagueId"
-                },
-                {
                     "commandName": "count",
                     "axis": "columns",
                     "numCols": 3
