@@ -1,3 +1,17 @@
+Upcoming changes:
+
+Will be going to major version change v.2.0.0
+
+Changes to be implemented:
+
+More game to game details. The full season stats are solid but would like the combine and enhance the game to game stats in games_result, games_penalties and games_scores so that standings, goalie, skater stats can be reduced to game filters.
+
+That update will change the nature of the exports and what SQL database they can fit into so will split these updates into simplified and enhanced.
+
+fhm-simplifier v1.1.0
+
+After a few months of use tidied up sql database example and league file ouput
+
 fhm-simplifier v1.0.0
 
 Official full versions release.
