@@ -2220,8 +2220,8 @@
                 },
                 {
                     "commandName": "assign",
-                    "colName": "Season",
-                    "colValue": "season"
+                    "colName": "Dates",
+                    "colValue": "Dates"
                 },
                 {
                     "commandName": "astype",
@@ -2390,7 +2390,7 @@
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "TeamId", "Season", "NTC", "NMC", "ELC", "UFA", "Scholarship", "AverageSalary", "MajorCurrentYear", "MajorNextYear", "Major3rdYear", "Major4thYear", "Major5thYear", "Major6thYear", "Major7thYear", "Major8thYear", "Major9thYear", "Major10thYear", "Major11thYear", "Major12thYear", "Major13thYear", "Major14thYear", "MinorCurrentYear", "MinorNextYear", "Minor3rdYear", "Minor4thYear", "Minor5thYear", "Minor6thYear", "Minor7thYear", "Minor8thYear", "Minor9thYear", "Minor10thYear", "Minor11thYear", "Minor12thYear", "Minor13thYear", "Minor14thYear"]
+                    "commValue": ["PlayerId", "TeamId", "Dates", "NTC", "NMC", "ELC", "UFA", "Scholarship", "AverageSalary", "MajorCurrentYear", "MajorNextYear", "Major3rdYear", "Major4thYear", "Major5thYear", "Major6thYear", "Major7thYear", "Major8thYear", "Major9thYear", "Major10thYear", "Major11thYear", "Major12thYear", "Major13thYear", "Major14thYear", "MinorCurrentYear", "MinorNextYear", "Minor3rdYear", "Minor4thYear", "Minor5thYear", "Minor6thYear", "Minor7thYear", "Minor8thYear", "Minor9thYear", "Minor10thYear", "Minor11thYear", "Minor12thYear", "Minor13thYear", "Minor14thYear"]
                 }
             ],
             "PreStoreIndex": 0,
@@ -2505,8 +2505,8 @@
                 },
                 {
                     "commandName": "assign",
-                    "colName": "Season",
-                    "colValue": "season"
+                    "colName": "Dates",
+                    "colValue": "Dates"
                 },
                 {
                     "commandName": "astype",
@@ -2675,7 +2675,7 @@
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "TeamId",  "Season", "NTC", "NMC", "ELC", "UFA", "Scholarship", "AverageSalary", "MajorNextYear", "Major3rdYear", "Major4thYear", "Major5thYear", "Major6thYear", "Major7thYear", "Major8thYear", "Major9thYear", "Major10thYear", "Major11thYear", "Major12thYear", "Major13thYear", "Major14thYear", "Major15thYear", "MinorNextYear", "Minor3rdYear", "Minor4thYear", "Minor5thYear", "Minor6thYear", "Minor7thYear", "Minor8thYear", "Minor9thYear", "Minor10thYear", "Minor11thYear", "Minor12thYear", "Minor13thYear", "Minor14thYear", "Minor15thYear"]
+                    "commValue": ["PlayerId", "TeamId",  "Dates", "NTC", "NMC", "ELC", "UFA", "Scholarship", "AverageSalary", "MajorNextYear", "Major3rdYear", "Major4thYear", "Major5thYear", "Major6thYear", "Major7thYear", "Major8thYear", "Major9thYear", "Major10thYear", "Major11thYear", "Major12thYear", "Major13thYear", "Major14thYear", "Major15thYear", "MinorNextYear", "Minor3rdYear", "Minor4thYear", "Minor5thYear", "Minor6thYear", "Minor7thYear", "Minor8thYear", "Minor9thYear", "Minor10thYear", "Minor11thYear", "Minor12thYear", "Minor13thYear", "Minor14thYear", "Minor15thYear"]
                 }
             ],
             "PreStoreIndex": 0,
@@ -3809,7 +3809,7 @@
                 }
             ],
             "PreStoreIndex": 1,
-                "Merges": {
+            "Merges": {
                 "on": "GameId",
                 "how": "left",
                 "mergeIndexes": [3, 1],
@@ -3821,8 +3821,7 @@
                     "commandName": "order",
                     "commValue": ["LeagueId", "Dates", "GameId", "HomeId", "ScoreHome", "AwayId", "ScoreAway", "Types", "Played", "OT", "SO", "Arena", "Attendance", "ScoreHomeP1", "ScoreHomeP2", "ScoreHomeP3", "ScoreHomeOT", "ScoreHomeSO", "ScoreAwayP1", "ScoreAwayP2", "ScoreAwayP3", "ScoreAwayOT", "ScoreAwaySO", "Star1", "Star2", "Star3", "ShotsHome", "ShotsAway", "PIMHome", "PIMAway", "HitsHome", "HitsAway", "GVHome", "GVAway", "TKHome", "TKAway", "FOWHome", "FOWAway", "SOGHomeP1", "SOGHomeP2", "SOGHomeP3", "SOGHomeOT", "SOGAwayP1", "SOGAwayP2", "SOGAwayP3", "SOGAwayOT", "PPGHome", "PPGAway", "PPOHome", "PPOAway", "SQ0Home", "SQ1Home", "SQ2Home", "SQ3Home", "SQ4Home", "SQ0Away", "SQ1Away", "SQ2Away", "SQ3Away", "SQ4Away"]
                 }
-            ],
-            "Output": "games_result"
+            ]
         },
         {
             "Name": "dfBoxScoringSummary",
@@ -3847,7 +3846,6 @@
                     "ScorerId",
                     "Assist1Id",
                     "Assist2Id",
-                    "TeamId",
                     "Note",
                     "SQ"
                 ],
@@ -3915,8 +3913,14 @@
                     "commValue": ["GameId", "ScorePeriod", "ScoreTime", "ScorerId", "Assist1Id", "Assist2Id", "TeamId", "Note", "SQ"]
                 }
             ],
-            "PreStoreIndex": 0,
-            "Output": "games_scores"
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "GameId",
+                "how": "left",
+                "mergeIndexes": [0, 1],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            }
         },
         {
             "Name": "dfBoxPenaltiesSummary",
@@ -3997,8 +4001,15 @@
                     "commValue": ["GameId", "PenaltyPeriod", "PenaltyTime", "PlayerId", "TeamId", "Penalty", "Minutes"]
                 }
             ],
-            "PreStoreIndex": 0,
-            "Output": "games_penalties"
+            "PreStoreIndex": 1,
+            "Merges": {
+                "on": "GameId",
+                "how": "left",
+                "mergeIndexes": [0, 1],
+                "PostStoreIndex": 0,
+                "popIndex": [1]
+            },
+            "Output": "games_result"
         },
         {
             "Name": "dfBoxGoalieSummary",
@@ -4048,8 +4059,8 @@
                 },
                 {
                     "commandName": "assign",
-                    "colName": "Season",
-                    "colValue": "season"
+                    "colName": "Dates",
+                    "colValue": "Dates"
                 },
                 {
                     "commandName": "replace",
@@ -4620,8 +4631,8 @@
                 },
                 {
                     "commandName": "assign",
-                    "colName": "Season",
-                    "colValue": "season"
+                    "colName": "Dates",
+                    "colValue": "Dates"
                 },
                 {
                 "commandName": "astype",
@@ -4634,10 +4645,6 @@
                         {
                             "colName": "TeamId",
                             "colValue": "Int32"
-                        },
-                        {
-                            "colName": "Season",
-                            "colValue": "string"
                         },
                         {
                             "colName": "FirstName",
@@ -4933,7 +4940,7 @@
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["StaffId", "TeamId", "Season", "FirstName", "LastName", "NickName", "DOB", "Birthcity", "Birthstate", "NationalityOne", "NationalityTwo", "NationalityThree", "Retired", "Executive", "Manager", "Coach", "Scout", "Trainer", "OffPref", "PhyPref", "LineMatching", "GoalieHandling", "FavourVeterans", "Innovation", "Loyalty", "CoachingGoalie", "CoachingDefense", "CoachingForward", "CoachingProspects", "DefSkills", "OffSkills", "PhyTraining", "PlayerManagement", "Motivation", "Discipline", "Negotiating", "SelfPreservation", "Tactics", "IngameTactics", "TrainerSkill", "EvaluateAbilities", "EvaluatePotential"]
+                    "commValue": ["StaffId", "TeamId", "Dates", "FirstName", "LastName", "NickName", "DOB", "Birthcity", "Birthstate", "NationalityOne", "NationalityTwo", "NationalityThree", "Retired", "Executive", "Manager", "Coach", "Scout", "Trainer", "OffPref", "PhyPref", "LineMatching", "GoalieHandling", "FavourVeterans", "Innovation", "Loyalty", "CoachingGoalie", "CoachingDefense", "CoachingForward", "CoachingProspects", "DefSkills", "OffSkills", "PhyTraining", "PlayerManagement", "Motivation", "Discipline", "Negotiating", "SelfPreservation", "Tactics", "IngameTactics", "TrainerSkill", "EvaluateAbilities", "EvaluatePotential"]
                 }
             ],
             "Output": "staffs"
@@ -5116,17 +5123,13 @@
                 },
                 {
                     "commandName": "assign",
-                    "colName": "Season",
-                    "colValue": "season"
+                    "colName": "Dates",
+                    "colValue": "Dates"
                 },
                 {
                     "commandName": "astype",
                     "range": "Per",
                     "commValue": [
-                        {
-                            "colName": "Season",
-                            "colValue": "string"
-                        },
                         {
                             "colName": "PlayerId",
                             "colValue": "Int32"
@@ -5143,7 +5146,7 @@
                 },
                 {
                     "commandName": "order",
-                    "commValue": ["PlayerId", "Season", "LeagueId", "TeamId"]
+                    "commValue": ["PlayerId", "Dates", "LeagueId", "TeamId"]
                 }
             ],
             "PreStoreIndex": 0,
