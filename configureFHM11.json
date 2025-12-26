@@ -2232,6 +2232,10 @@
                             "colValue": "Int32"
                         },
                         {
+                            "colName": "Dates",
+                            "colValue": "datetime64[ns]"
+                        },
+                        {
                             "colName": "TeamId",
                             "colValue": "Int32"
                         },
@@ -2515,6 +2519,10 @@
                         {
                             "colName": "PlayerId",
                             "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Dates",
+                            "colValue": "datetime64[ns]"
                         },
                         {
                             "colName": "TeamId",
@@ -3066,6 +3074,16 @@
                     "commandName": "assign",
                     "colName": "Dates",
                     "colValue": "date"
+                },
+                {
+                    "commandName": "astype",
+                    "range": "Per",
+                    "commValue": [
+                        {
+                            "colName": "Dates",
+                            "colValue": "datetime64[ns]"
+                        }
+                    ]
                 },
                 {
                     "commandName": "order",
@@ -3846,6 +3864,7 @@
                     "ScorerId",
                     "Assist1Id",
                     "Assist2Id",
+                    "TeamId",
                     "Note",
                     "SQ"
                 ],
@@ -4058,11 +4077,6 @@
                     ]
                 },
                 {
-                    "commandName": "assign",
-                    "colName": "Dates",
-                    "colValue": "Dates"
-                },
-                {
                     "commandName": "replace",
                     "commValue": [
                         {
@@ -4079,6 +4093,10 @@
                         {
                             "colName": "GameId",
                             "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Dates",
+                            "colValue": "datetime64[ns]"
                         },
                         {
                             "colName": "PlayerId",
@@ -4306,6 +4324,10 @@
                         {
                             "colName": "GameId",
                             "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Dates",
+                            "colValue": "datetime64[ns]"
                         },
                         {
                             "colName": "PlayerId",
@@ -4641,6 +4663,10 @@
                         {
                             "colName": "StaffId",
                             "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Dates",
+                            "colValue": "datetime64[ns]"
                         },
                         {
                             "colName": "TeamId",
@@ -5133,6 +5159,10 @@
                         {
                             "colName": "PlayerId",
                             "colValue": "Int32"
+                        },
+                        {
+                            "colName": "Dates",
+                            "colValue": "datetime64[ns]"
                         },
                         {
                             "colName": "LeagueId",

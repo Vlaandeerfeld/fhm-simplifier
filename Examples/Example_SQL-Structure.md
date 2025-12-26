@@ -40,7 +40,7 @@ CREATE TABLE teams(
 );
 
 CREATE TABLE players(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	FirstName VARCHAR(30),
@@ -120,7 +120,7 @@ CREATE TABLE players(
 );
 
 CREATE TABLE contracts(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	NTC VARCHAR(3),
@@ -161,7 +161,7 @@ CREATE TABLE contracts(
 );
 
 CREATE TABLE contracts_renewed(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	NTC VARCHAR(3),
@@ -202,7 +202,7 @@ CREATE TABLE contracts_renewed(
 );
 
 CREATE TABLE player_rights(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	Season VARCHAR(9),
 	LeagueId SMALLINT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
@@ -214,7 +214,7 @@ CREATE TABLE skater_stats_game(
 	Dates DATE,
 	Types VARCHAR(20),
 	GameId MEDIUMINT UNSIGNED,
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
 	GROff SMALLINT UNSIGNED,
@@ -268,7 +268,7 @@ CREATE TABLE skater_stats_game(
 );
 
 CREATE TABLE skater_stats_rs(
-	PlayerId MEDIUMINT UNSIGNED, 
+	PlayerId INT UNSIGNED, 
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -313,7 +313,7 @@ CREATE TABLE skater_stats_rs(
 );
 
 CREATE TABLE skater_stats_po(
-	PlayerId MEDIUMINT UNSIGNED, 
+	PlayerId INT UNSIGNED, 
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -358,7 +358,7 @@ CREATE TABLE skater_stats_po(
 );
 
 CREATE TABLE skater_stats_ps(
-	PlayerId MEDIUMINT UNSIGNED, 
+	PlayerId INT UNSIGNED, 
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -407,7 +407,7 @@ CREATE TABLE goalie_stats_game(
 	Dates DATE,
 	Types VARCHAR(20),
 	GameId MEDIUMINT UNSIGNED,
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
 	SA SMALLINT UNSIGNED,
@@ -420,7 +420,7 @@ CREATE TABLE goalie_stats_game(
 );
 
 CREATE TABLE goalie_stats_rs(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -440,7 +440,7 @@ CREATE TABLE goalie_stats_rs(
 );
 
 CREATE TABLE goalie_stats_po(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -460,7 +460,7 @@ CREATE TABLE goalie_stats_po(
 );
 
 CREATE TABLE goalie_stats_ps(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -480,7 +480,7 @@ CREATE TABLE goalie_stats_ps(
 );
 
 CREATE TABLE drafts(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	DraftId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	Round SMALLINT UNSIGNED,
@@ -684,7 +684,7 @@ CREATE TABLE games_penalties(
 	GameId MEDIUMINT UNSIGNED,
 	PenaltyPeriod VARCHAR(3),
 	PenaltyTime MEDIUMINT UNSIGNED,
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId MEDIUMINT UNSIGNED,
 	Penalty VARCHAR(30),
 	Minutes MEDIUMINT UNSIGNED,
@@ -805,7 +805,7 @@ CREATE TABLE teams_temp(
 );
 
 CREATE TABLE players_temp(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	FirstName VARCHAR(30),
@@ -885,7 +885,7 @@ CREATE TABLE players_temp(
 );
 
 CREATE TABLE contracts_temp(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	NTC VARCHAR(3),
@@ -926,7 +926,7 @@ CREATE TABLE contracts_temp(
 );
 
 CREATE TABLE contracts_renewed_temp(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	NTC VARCHAR(3),
@@ -967,7 +967,7 @@ CREATE TABLE contracts_renewed_temp(
 );
 
 CREATE TABLE player_rights_temp(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	Season VARCHAR(9),
 	LeagueId SMALLINT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
@@ -979,7 +979,7 @@ CREATE TABLE skater_stats_game_temp(
 	Dates DATE,
 	Types VARCHAR(20),
 	GameId MEDIUMINT UNSIGNED,
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
 	GROff SMALLINT UNSIGNED,
@@ -1033,7 +1033,7 @@ CREATE TABLE skater_stats_game_temp(
 );
 
 CREATE TABLE skater_stats_rs_temp(
-	PlayerId MEDIUMINT UNSIGNED, 
+	PlayerId INT UNSIGNED, 
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -1078,7 +1078,7 @@ CREATE TABLE skater_stats_rs_temp(
 );
 
 CREATE TABLE skater_stats_po_temp(
-	PlayerId MEDIUMINT UNSIGNED, 
+	PlayerId INT UNSIGNED, 
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -1123,7 +1123,7 @@ CREATE TABLE skater_stats_po_temp(
 );
 
 CREATE TABLE skater_stats_ps_temp(
-	PlayerId MEDIUMINT UNSIGNED, 
+	PlayerId INT UNSIGNED, 
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -1172,7 +1172,7 @@ CREATE TABLE goalie_stats_game_temp(
 	Dates DATE,
 	Types VARCHAR(20),
 	GameId MEDIUMINT UNSIGNED,
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	GR SMALLINT UNSIGNED,
 	SA SMALLINT UNSIGNED,
@@ -1185,7 +1185,7 @@ CREATE TABLE goalie_stats_game_temp(
 );
 
 CREATE TABLE goalie_stats_rs_temp(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -1205,7 +1205,7 @@ CREATE TABLE goalie_stats_rs_temp(
 );
 
 CREATE TABLE goalie_stats_po_temp(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -1225,7 +1225,7 @@ CREATE TABLE goalie_stats_po_temp(
 );
 
 CREATE TABLE goalie_stats_ps_temp(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	GP SMALLINT UNSIGNED,
@@ -1245,7 +1245,7 @@ CREATE TABLE goalie_stats_ps_temp(
 );
 
 CREATE TABLE drafts_temp(
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	DraftId SMALLINT UNSIGNED,
 	Season VARCHAR(9),
 	Round SMALLINT UNSIGNED,
@@ -1450,7 +1450,7 @@ CREATE TABLE games_penalties_temp(
 	GameId MEDIUMINT UNSIGNED,
 	PenaltyPeriod VARCHAR(3),
 	PenaltyTime MEDIUMINT UNSIGNED,
-	PlayerId MEDIUMINT UNSIGNED,
+	PlayerId INT UNSIGNED,
 	TeamId MEDIUMINT UNSIGNED,
 	Penalty VARCHAR(30),
 	Minutes MEDIUMINT UNSIGNED,
